@@ -24,40 +24,14 @@ namespace SM.DAL.Dao
 		{
 			throw new NotImplementedException();
 		}
-		/*
-		public async Task<List<DTOUser>> GetAll()
+
+
+		
+		public async Task<User> Register(User user)
 		{
-			var dtos = new List<DTOUser>();
-
-			var users =  await _context.Users.ToListAsync();
-
-			dtos.AddRange(users.Select(user => new DTOUser()
-			{
-				PersonalID =user.PersonalID,
-				Email = user.Email,
-				Name = user.Name,
-				Surname = user.Surname,
-				Password = user.Password,
-				WalletAddress = user.WalletAddress,
-
-			}).ToList());
-
-			return dtos;
-		}
-	*/
-		public IActionResult Login(DTOUser userdto)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IActionResult Logout()
-		{
-			throw new NotImplementedException();
-		}
-
-		public Task<DTOUser> Register(DTOUser userdto)
-		{
-			throw new NotImplementedException();
+			await _context.Users.AddAsync(user);
+			await _context.SaveChangesAsync();
+			return user;
 		}
 
 		public Task Update(DTOUser dto)
@@ -71,5 +45,16 @@ namespace SM.DAL.Dao
 
 		}
 
+		public  User GetByDNI(int id)
+		{
+
+			return  _context.Users.Where(u => u.PersonalID == id).FirstOrDefault();
+			
+		}
+
+		public User GetByEmail(string email)
+		{
+			return _context.Users.Where(u => u.Email == email).FirstOrDefault();
+		}
 	}
 }

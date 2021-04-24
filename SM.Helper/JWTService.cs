@@ -5,11 +5,11 @@ using System.Text;
 
 namespace SM.Helper
 {
-	public class JWTService
+	public static class JWTService
 	{
-		private string SecureKey = "This is the private key used to encrypt JWT";
+		private static string SecureKey = "This is the private key used to encrypt JWT";
 
-		public string Generate(int id)
+		public static string Generate(int id)
 		{
 			var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecureKey));
 			var credentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
@@ -21,7 +21,7 @@ namespace SM.Helper
 			return new JwtSecurityTokenHandler().WriteToken(securityToken);
 		}
 
-		public JwtSecurityToken Verify(string jwt)
+		public static JwtSecurityToken Verify(string jwt)
 		{
 			JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
 

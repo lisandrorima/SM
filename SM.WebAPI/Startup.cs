@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using SM.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using SM.Bll;
+using SM.Helper;
 
 namespace SM.WebAPI
 {
@@ -25,6 +26,7 @@ namespace SM.WebAPI
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
+
 		}
 
 		public IConfiguration Configuration { get; }
@@ -34,6 +36,8 @@ namespace SM.WebAPI
 		{
 			services.AddTransient<IBllUser, BllUser>();
 			services.AddTransient<IDaoUser, DaoUser>();
+
+			services.AddAutoMapper(typeof(MappingProfile));
 
 
 			services.AddCors(o => o.AddPolicy("AllowOrigin", builder =>

@@ -18,6 +18,9 @@ namespace SM.DAL.Models
 
 		[Required]
 		public int PersonalID { get; set; }
+
+		[Required]
+
 		public string Email { get; set; }
 
 		[Required]

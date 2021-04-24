@@ -6,18 +6,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Mvc;
 
 namespace SM.DAL.Dao_interfaces
 {
 	public interface IDaoUser
 	{
-		Task<DTOUser> Register(DTOUser userdto);
-		IActionResult Logout();
-		IActionResult Login(DTOUser userdto);
+		Task<User> Register(User user);
+		User GetByDNI(int id);
+		User GetByEmail(string email);
 		Task Update(DTOUser dto);
 		Task Delete(int id);
 		Task<IEnumerable<User>>GetAll();
+
 
 	}
 }

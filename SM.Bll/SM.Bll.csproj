@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SM.DAL\SM.DAL.csproj" />
     <ProjectReference Include="..\SM.Entities\SM.Entities.csproj" />
     <ProjectReference Include="..\SM.Helper\SM.Helper.csproj" />

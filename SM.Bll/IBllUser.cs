@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SM.DAL.Models;
 using SM.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,8 @@ namespace SM.Bll
 {
 	public interface IBllUser
 	{
-		Task<DTOUser> Register(DTOUser userdto);
-		IActionResult Logout();
-		IActionResult Login(DTOUser userdto);
+		Task<User> Register(DTOUser userdto);
+		int Login(DTOLogin userdto);
 		Task Update(DTOUser dto);
 		Task Delete(int id);
 		Task<IEnumerable<DTOUser>> GetAll();
