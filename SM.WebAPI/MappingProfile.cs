@@ -13,7 +13,7 @@ namespace SM.WebAPI
 		public MappingProfile()
 		{
 			CreateMap<DTOUser, User>();
-
+			CreateMap<DTOAddRealEstate, RealEstate>();
 		}
 	}
 }

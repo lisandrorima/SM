@@ -7,6 +7,7 @@ using SM.Entities;
 using SM.Helper;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -32,12 +33,12 @@ namespace SM.WebAPI.Controllers
 		}
 
 		[HttpPost("register")]
-		public async Task<ActionResult> Register(DTOUser userdto)
+		public IActionResult Register(DTOUser userdto)
 		{
 			try
 			{
-				User user = await _repository.Register(userdto);
-				return Ok(user);
+				User user =  _repository.Register(userdto).Result;
+				return Ok("User " + user.PersonalID + " was created");
 			}
 			catch (Exception)
 			{
@@ -80,16 +81,15 @@ namespace SM.WebAPI.Controllers
 		{
 			try
 			{
-				var jwt = Request.Cookies["jwt"];
-				var token = JWTService.Verify(jwt);
-				int userId = Convert.ToInt32(token.Issuer);
+				
+				int userId = Convert.ToInt32(ValidateJWT().Issuer);
 				if(_repository.Update(userdto, userId).Result.ID != null)
 				{
 					return Ok("success");
 				}
 				else
 				{
-					return Unauthorized("Not loged");
+					return Unauthorized("You don't have the correct privileges to perform this action");
 				}
 					
 			}
@@ -100,6 +100,13 @@ namespace SM.WebAPI.Controllers
 			}
 
 
+		}
+
+		private JwtSecurityToken ValidateJWT()
+		{
+			var jwt = Request.Cookies["jwt"];
+			var token = JWTService.Verify(jwt);
+			return token;
 		}
 
 	}
