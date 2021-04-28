@@ -13,7 +13,7 @@ namespace SM.Bll
 	{
 		Task<User> Register(DTOUser userdto);
 		int Login(DTOLogin userdto);
-		Task Update(DTOUser dto);
+		Task<User> Update(DTOUser dto, int userID);
 		Task Delete(int id);
 		Task<IEnumerable<DTOUser>> GetAll();
 	}

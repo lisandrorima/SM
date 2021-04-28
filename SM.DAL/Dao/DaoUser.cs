@@ -34,9 +34,16 @@ namespace SM.DAL.Dao
 			return user;
 		}
 
-		public Task Update(DTOUser dto)
+		public  async Task<User> Update(User dto)
 		{
-			throw new NotImplementedException();
+			User putUser= await _context.Users.FindAsync(dto.ID);
+			
+			putUser.Name = dto.Name;
+			putUser.WalletAddress = dto.WalletAddress;
+			putUser.Surname = dto.Surname;
+
+			await _context.SaveChangesAsync();
+			return  putUser;
 		}
 
 		public async Task<IEnumerable<User>> GetAll()
@@ -56,5 +63,7 @@ namespace SM.DAL.Dao
 		{
 			return _context.Users.Where(u => u.Email == email).FirstOrDefault();
 		}
+
+	
 	}
 }

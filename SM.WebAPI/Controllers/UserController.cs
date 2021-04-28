@@ -39,7 +39,7 @@ namespace SM.WebAPI.Controllers
 				User user = await _repository.Register(userdto);
 				return Ok(user);
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 
 				return BadRequest("Already registered");
@@ -71,6 +71,32 @@ namespace SM.WebAPI.Controllers
 					HttpOnly = true
 				});
 				return Ok("success");
+			}
+
+		}
+
+		[HttpPut("modificardatos")] 
+			public IActionResult Update(DTOUser userdto)
+		{
+			try
+			{
+				var jwt = Request.Cookies["jwt"];
+				var token = JWTService.Verify(jwt);
+				int userId = Convert.ToInt32(token.Issuer);
+				if(_repository.Update(userdto, userId).Result.ID != null)
+				{
+					return Ok("success");
+				}
+				else
+				{
+					return Unauthorized("Not loged");
+				}
+					
+			}
+			catch(Exception)
+			{
+				return BadRequest("Exception");
+
 			}
 
 

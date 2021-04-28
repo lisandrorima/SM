@@ -96,9 +96,21 @@ namespace SM.Bll
 
 		}
 
-		public Task Update(DTOUser dto)
+		public async Task<User> Update(DTOUser dto, int UserId)
 		{
-			throw new NotImplementedException();
+			var user = _mapper.Map<User>(dto);
+			user.ID = UserId;
+
+			User u = _DaoUser.GetByEmail(dto.Email);
+			if (u != null)
+			{
+				if (u.ID == UserId)
+				{
+					return await _DaoUser.Update(user);
+				}
+			}
+			
+			return new User();
 		}
 	}
 }
