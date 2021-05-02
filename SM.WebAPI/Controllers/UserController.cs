@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SM.Bll;
 using SM.DAL.Dao_interfaces;
@@ -48,11 +49,9 @@ namespace SM.WebAPI.Controllers
 
 
 		}
-
 		[HttpPost("logout")]
 		public IActionResult Logout()
 		{
-			Response.Cookies.Delete("jwt");
 			return Ok("Succesfully disconected");
 		}
 
@@ -66,11 +65,15 @@ namespace SM.WebAPI.Controllers
 			}
 			else
 			{
+				
+				
 				var jwt = JWTService.Generate(id);
 				Response.Cookies.Append("jwt", jwt, new CookieOptions
 				{
-					HttpOnly = true
+					HttpOnly = true,
+					SameSite= SameSiteMode.None
 				});
+
 				return Ok("success");
 			}
 

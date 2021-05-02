@@ -42,7 +42,7 @@ namespace SM.WebAPI
 
 			services.AddCors(o => o.AddPolicy("AllowOrigin", builder =>
 			{
-				builder.WithOrigins(new[] { "https://localhost:3000", "http://localhost:3000", "http://localhost:44339" })
+				builder.WithOrigins(new[] { "https://localhost:3000", "http://localhost:3000", "http://localhost:44339", "http://127.0.0.1:3000" })
 					   .AllowAnyMethod()
 					   .AllowAnyHeader()
 					   .AllowCredentials();

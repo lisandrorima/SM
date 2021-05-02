@@ -51,8 +51,7 @@ namespace SM.Bll
 		public int Login(DTOLogin userdto)
 		{
 			var id = -1;
-			try
-			{
+			
 				var user = _DaoUser.GetByEmail(userdto.Email);
 				
 
@@ -63,11 +62,8 @@ namespace SM.Bll
 						id = user.ID.Value;
 					}
 				}
-			}
-			catch (Exception)
-			{
-				throw;
-			}
+			
+			
 			return id;
 
 
