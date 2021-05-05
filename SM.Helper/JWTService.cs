@@ -24,19 +24,27 @@ namespace SM.Helper
 		public static JwtSecurityToken Verify(string jwt)
 		{
 			JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+			JwtSecurityToken empty = new JwtSecurityToken();
+			if (jwt!=null)
+			{
+				var key = Encoding.ASCII.GetBytes(SecureKey);
+				tokenHandler.ValidateToken(jwt,
+					new TokenValidationParameters
+					{
+						IssuerSigningKey = new SymmetricSecurityKey(key),
+						ValidateIssuerSigningKey = true,
+						ValidateIssuer = false,
+						ValidateAudience = false
+					},
+					out SecurityToken validatedToken);
+				return (JwtSecurityToken)validatedToken;
+			}
+				
+				return (JwtSecurityToken)empty;
 
-			var key = Encoding.ASCII.GetBytes(SecureKey);
-			tokenHandler.ValidateToken(jwt,
-				new TokenValidationParameters
-				{
-					IssuerSigningKey = new SymmetricSecurityKey(key),
-					ValidateIssuerSigningKey = true,
-					ValidateIssuer = false,
-					ValidateAudience = false
-				},
-				out SecurityToken validatedToken);
+			
 
-			return (JwtSecurityToken)validatedToken;
+
 		}
 	}
 }

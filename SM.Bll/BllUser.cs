@@ -33,6 +33,8 @@ namespace SM.Bll
 			var users = await _DaoUser.GetAll();
 			var dtos = new List<DTOUser>();
 
+
+
 			dtos.AddRange(users.Select(user => new DTOUser()
 			{
 				PersonalID = user.PersonalID,

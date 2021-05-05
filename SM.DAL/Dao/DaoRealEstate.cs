@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using SM.DAL.Dao_interfaces;
 using SM.DAL.Models;
+using SM.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,13 +30,23 @@ namespace SM.DAL.Dao
 
 		public async Task<IEnumerable<RealEstate>> GetAllAsync()
 		{
-			return await _context.RealEstates.ToListAsync();
+			return await _context.RealEstates.Where(R => R.Available).Include(r=>r.images).ToListAsync();
 
+		}
+
+		public async Task<IEnumerable<RealEstate>> GetFilteredMetros(int from, int to)
+		{
+			return await _context.RealEstates.Where(rs => rs.SqMtrs >=from & rs.SqMtrs<=to).Include(r => r.images).ToListAsync();
+		}
+
+		public async Task<IEnumerable<RealEstate>> GetPropertyDetails(int id)
+		{
+			return await _context.RealEstates.Where(c => c.ID == id).Include(r => r.images).Include(u=>u.User).ToListAsync();
 		}
 
 		public async Task<IEnumerable<RealEstate>> GetRealEstatesByOwnerAsync(int id)
 		{
-			return await _context.RealEstates.Where(c=> c.User.ID ==id).ToListAsync();
+			return await _context.RealEstates.Where(c=> c.User.ID ==id).Include(r => r.images).ToListAsync();
 		}
 	}
 }

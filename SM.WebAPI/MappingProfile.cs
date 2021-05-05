@@ -13,7 +13,34 @@ namespace SM.WebAPI
 		public MappingProfile()
 		{
 			CreateMap<DTOUser, User>();
+			CreateMap<DTOUser, User>().ReverseMap();
+			CreateMap<DTOUserReDetail, User>();
+			CreateMap<DTOUserReDetail, User>().ReverseMap();
+
+			
+
 			CreateMap<DTOAddRealEstate, RealEstate>();
+
+			CreateMap<DTOImages, ImagesRealEstate>();
+			CreateMap<DTOImages, ImagesRealEstate>().ReverseMap();
+
+			CreateMap<DTOShowRealEstate, RealEstate>()
+				.ForMember(s => s.images, c => c.MapFrom(m => m.ImgURL));
+
+			CreateMap<DTOShowRealEstate, RealEstate>().ReverseMap()
+				.ForMember(s => s.ImgURL, c => c.MapFrom(m => m.images));
+
+
+			CreateMap<DTOShowFullDetail, RealEstate>()
+				.ForMember(s => s.images, c => c.MapFrom(m => m.ImgURL))
+				.ForMember(s => s.User, c => c.MapFrom(m => m.User));
+
+			CreateMap<DTOShowFullDetail, RealEstate>().ReverseMap()
+				.ForMember(s => s.ImgURL, c => c.MapFrom(m => m.images))
+				.ForMember(s => s.User, c => c.MapFrom(m => m.User)); ;
+
+
+
 		}
 	}
 }

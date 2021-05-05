@@ -107,8 +107,12 @@ namespace SM.WebAPI.Controllers
 
 		private JwtSecurityToken ValidateJWT()
 		{
+			
 			var jwt = Request.Cookies["jwt"];
-			var token = JWTService.Verify(jwt);
+			var token = new JwtSecurityToken();
+
+			token = JWTService.Verify(jwt);
+
 			return token;
 		}
 

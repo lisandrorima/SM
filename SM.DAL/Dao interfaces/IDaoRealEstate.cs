@@ -14,6 +14,7 @@ namespace SM.DAL.Dao_interfaces
 		Task<IEnumerable<RealEstate>> GetRealEstatesByOwnerAsync(int id);
 
 		Task<RealEstate> AddRealEstate(RealEstate realEstate);
-
+		Task<IEnumerable<RealEstate>> GetFilteredMetros(int from, int to);
+		Task<IEnumerable<RealEstate>> GetPropertyDetails(int id);
 	}
 }

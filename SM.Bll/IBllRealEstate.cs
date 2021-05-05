@@ -11,6 +11,11 @@ namespace SM.Bll
 {
 	public interface IBllRealEstate
 	{
-
+		Task<RealEstate> AddRealEstate(DTOAddRealEstate realEstatedto);
+		Task<RealEstate> UpdateRealEstate(DTOAddRealEstate dto, int realEstateID);
+		Task<IEnumerable<DTOShowRealEstate>> GetAll();
+		Task<IEnumerable<DTOShowRealEstate>> GetRealEstatesByOwner(int userID);
+		Task<IEnumerable<DTOShowRealEstate>> GetByMetros(int from, int to);
+		Task<IEnumerable<DTOShowFullDetail>> GetFullDetailsByID(int id);
 	}
 }
