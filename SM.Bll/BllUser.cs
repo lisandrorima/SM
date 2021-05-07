@@ -14,12 +14,12 @@ namespace SM.Bll
 	{
 
 		private IDaoUser _DaoUser;
-		private readonly SmartPropDbContext _db;
+		//private readonly SmartPropDbContext _db;
 		private readonly IMapper _mapper;
-		public BllUser(IDaoUser DaoUser, SmartPropDbContext db, IMapper mapper)
+		public BllUser(IDaoUser DaoUser, IMapper mapper)
 		{
 			_DaoUser = DaoUser;
-			_db = db;
+			//_db = db;
 			_mapper = mapper;
 		}
 
@@ -50,23 +50,23 @@ namespace SM.Bll
 
 		}
 
-		public int Login(DTOLogin userdto)
+		public DTOUser Login(DTOLogin userdto)
 		{
-			var id = -1;
-			
-				var user = _DaoUser.GetByEmail(userdto.Email);
-				
+			//var id = -1;
 
-				if (user != null)
+			var user = _DaoUser.GetByEmail(userdto.Email);
+			var dto = new DTOUser();
+
+			if (user != null)
+			{
+				if (BCrypt.Net.BCrypt.Verify(userdto.Password, user.Password))
 				{
-					if (BCrypt.Net.BCrypt.Verify(userdto.Password, user.Password))
-					{
-						id = user.ID.Value;
-					}
+					dto = _mapper.Map<DTOUser>(user);
 				}
-			
-			
-			return id;
+			}
+
+
+			return dto;
 
 
 
@@ -94,20 +94,25 @@ namespace SM.Bll
 
 		}
 
-		public async Task<User> Update(DTOUser dto, int UserId)
+		public async Task<User> Update(DTOUser dto, string email)
 		{
-			var user = _mapper.Map<User>(dto);
-			user.ID = UserId;
+			var userFromDTO = _mapper.Map<User>(dto);
+			User userFromDTOValidate = _DaoUser.GetByEmail(userFromDTO.Email);
+			User fromDDBBwithEMail = _DaoUser.GetByEmail(dto.Email);
+			
 
-			User u = _DaoUser.GetByEmail(dto.Email);
-			if (u != null)
+			
+			if (fromDDBBwithEMail != null)
 			{
-				if (u.ID == UserId)
+				if (fromDDBBwithEMail.ID == userFromDTOValidate.ID)
 				{
-					return await _DaoUser.Update(user);
+					userFromDTO.ID = userFromDTOValidate.ID;
+
+
+					return await _DaoUser.Update(userFromDTO);
 				}
 			}
-			
+
 			return new User();
 		}
 	}

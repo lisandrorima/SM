@@ -12,8 +12,8 @@ namespace SM.Bll
 	public interface IBllUser
 	{
 		Task<User> Register(DTOUser userdto);
-		int Login(DTOLogin userdto);
-		Task<User> Update(DTOUser dto, int userID);
+		DTOUser Login(DTOLogin userdto);
+		Task<User> Update(DTOUser dto, string email);
 		Task Delete(int id);
 		Task<IEnumerable<DTOUser>> GetAll();
 	}

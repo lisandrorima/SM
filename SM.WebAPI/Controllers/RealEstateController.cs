@@ -8,6 +8,7 @@ using SM.Entities;
 using SM.Helper;
 using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace SM.WebAPI.Controllers
 {
@@ -23,7 +24,7 @@ namespace SM.WebAPI.Controllers
 			_repository = BllRealEstate;
 		}
 
-
+		[AllowAnonymous]
 		[HttpGet]
 		[Route("getRealEstates")]
 		public Task<IEnumerable<DTOShowRealEstate>> GetAll()
@@ -31,6 +32,7 @@ namespace SM.WebAPI.Controllers
 			return _repository.GetAll();
 		}
 
+		[AllowAnonymous]
 		[HttpGet]
 		[Route("areaFilter")]
 		public Task<IEnumerable<DTOShowRealEstate>> GetbyMetros(int from, int to)
@@ -38,32 +40,32 @@ namespace SM.WebAPI.Controllers
 			return _repository.GetByMetros(from,to);
 		}
 
-
-
+		
+		[Authorize]
 		[HttpGet]
 		[Route("getMyRealEstates")]
 		public Task<IEnumerable<DTOShowRealEstate>> GetMyRealEstates()
 		{
-			int userId = Convert.ToInt32(ValidateJWT().Issuer);
-			return _repository.GetRealEstatesByOwner(userId);
+
+
+			string email = "";
+			var identity = HttpContext.User.Identity as ClaimsIdentity;
+			if (identity != null)
+			{
+				email = identity.FindFirst("UserEmail").Value;
+			}
+			
+
+			return _repository.GetRealEstatesByOwner(email);
 		}
 
+		[AllowAnonymous]
 		[HttpGet]
 		[Route("GetPropertyDetail")]
 		public  Task<IEnumerable<DTOShowFullDetail>> GetPropertyDetail(int id)
 		{
 			return _repository.GetFullDetailsByID(id);
 
-		}
-
-		private JwtSecurityToken ValidateJWT()
-		{
-			var jwt = Request.Cookies["jwt"];
-			var token = new JwtSecurityToken();
-
-			token = JWTService.Verify(jwt);
-
-			return token;
 		}
 
 	}

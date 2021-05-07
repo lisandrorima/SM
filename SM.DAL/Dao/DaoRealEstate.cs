@@ -44,9 +44,9 @@ namespace SM.DAL.Dao
 			return await _context.RealEstates.Where(c => c.ID == id).Include(r => r.images).Include(u=>u.User).ToListAsync();
 		}
 
-		public async Task<IEnumerable<RealEstate>> GetRealEstatesByOwnerAsync(int id)
+		public async Task<IEnumerable<RealEstate>> GetRealEstatesByOwnerAsync(string email)
 		{
-			return await _context.RealEstates.Where(c=> c.User.ID ==id).Include(r => r.images).ToListAsync();
+			return await _context.RealEstates.Where(c=> c.User.Email == email).Include(r => r.images).ToListAsync();
 		}
 	}
 }

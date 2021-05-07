@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace SM.WebAPI.Controllers
@@ -26,19 +27,14 @@ namespace SM.WebAPI.Controllers
 		}
 
 
-		[HttpGet]
-		[Route("GetAll")]
-		public Task<IEnumerable<DTOUser>> GetAll()
-		{
-			return _repository.GetAll();
-		}
 
+		[AllowAnonymous]
 		[HttpPost("register")]
 		public IActionResult Register(DTOUser userdto)
 		{
 			try
 			{
-				User user =  _repository.Register(userdto).Result;
+				User user = _repository.Register(userdto).Result;
 				return Ok("User " + user.PersonalID + " was created");
 			}
 			catch (Exception)
@@ -49,44 +45,49 @@ namespace SM.WebAPI.Controllers
 
 
 		}
+
+		//FALTA 
 		[HttpPost("logout")]
 		public IActionResult Logout()
 		{
 			return Ok("Succesfully disconected");
 		}
 
+		[AllowAnonymous]
 		[HttpPost("login")]
 		public IActionResult Login(DTOLogin userdto)
 		{
-			var id = _repository.Login(userdto);
-			if (id == -1)
+			var user = _repository.Login(userdto);
+			
+			if (user.Email == null)
 			{
 				return BadRequest();
 			}
 			else
 			{
 				
-				
-				var jwt = JWTService.Generate(id);
-				Response.Cookies.Append("jwt", jwt, new CookieOptions
-				{
-					HttpOnly = true,
-					SameSite= SameSiteMode.None
-				});
-
-				return Ok("success");
+				var jwt = GenerateJWT(user);
+				Response.Headers.Add("Authorization", jwt);
+				return Ok(jwt);
 			}
 
 		}
 
+		[Authorize]
 		[HttpPut("modificardatos")] 
 			public IActionResult Update(DTOUser userdto)
 		{
 			try
 			{
-				
-				int userId = Convert.ToInt32(ValidateJWT().Issuer);
-				if(_repository.Update(userdto, userId).Result.ID != null)
+				string email = "";
+				var identity = HttpContext.User.Identity as ClaimsIdentity;
+				if (identity != null)
+				{
+					email =identity.FindFirst("UserEmail").Value;
+				}
+			
+
+				if(_repository.Update(userdto, email).Result.ID != null)
 				{
 					return Ok("success");
 				}
@@ -105,16 +106,13 @@ namespace SM.WebAPI.Controllers
 
 		}
 
-		private JwtSecurityToken ValidateJWT()
+
+		private string GenerateJWT(DTOUser user)
 		{
-			
-			var jwt = Request.Cookies["jwt"];
-			var token = new JwtSecurityToken();
+			JWTService validator = new JWTService();
+			string securityToken = validator.Generate(user);
 
-			token = JWTService.Verify(jwt);
-
-			return token;
+			return securityToken;
 		}
-
 	}
 }

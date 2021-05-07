@@ -11,7 +11,7 @@ namespace SM.DAL.Dao_interfaces
 	{
 		Task<IEnumerable<RealEstate>> GetAllAsync();
 
-		Task<IEnumerable<RealEstate>> GetRealEstatesByOwnerAsync(int id);
+		Task<IEnumerable<RealEstate>> GetRealEstatesByOwnerAsync(string email);
 
 		Task<RealEstate> AddRealEstate(RealEstate realEstate);
 		Task<IEnumerable<RealEstate>> GetFilteredMetros(int from, int to);

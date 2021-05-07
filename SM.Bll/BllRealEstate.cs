@@ -14,12 +14,10 @@ namespace SM.Bll
 	{
 
 		private IDaoRealEstate _DaoRealEstate;
-		private readonly SmartPropDbContext _db;
 		private readonly IMapper _mapper;
-		public BllRealEstate(IDaoRealEstate daoRealEstate, SmartPropDbContext db, IMapper mapper)
+		public BllRealEstate(IDaoRealEstate daoRealEstate,  IMapper mapper)
 		{
 			_DaoRealEstate = daoRealEstate;
-			_db = db;
 			_mapper = mapper;
 		}
 
@@ -37,9 +35,10 @@ namespace SM.Bll
 			return dtos;
 		}
 
-		public async Task<IEnumerable<DTOShowRealEstate>> GetRealEstatesByOwner(int userId)
+		public async Task<IEnumerable<DTOShowRealEstate>> GetRealEstatesByOwner(string email)
 		{
-			var realEstates = await _DaoRealEstate.GetRealEstatesByOwnerAsync(userId);
+
+			var realEstates = await _DaoRealEstate.GetRealEstatesByOwnerAsync(email);
 			List<DTOShowRealEstate> dtos = new List<DTOShowRealEstate>();
 
 			foreach (var realEstate in realEstates)
