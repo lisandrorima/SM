@@ -24,6 +24,7 @@ namespace SM.DAL.Models
 
         public DbSet<ImagesRealEstate> ImagesRealEstate { get; set; }
         public DbSet<RealEstate> RealEstates { get; set; }
+        public DbSet<RentContract> RentContracts { get; set; }
         public DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

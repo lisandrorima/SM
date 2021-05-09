@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SM.DAL.Models;
 
 namespace SM.DAL.Migrations
 {
     [DbContext(typeof(SmartPropDbContext))]
-    partial class SmartPropDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210508001027_RentContract2")]
+    partial class RentContract2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,39 +92,6 @@ namespace SM.DAL.Migrations
                     b.ToTable("RealEstates");
                 });
 
-            modelBuilder.Entity("SM.DAL.Models.RentContract", b =>
-                {
-                    b.Property<int?>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("OwnerID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RealEstateID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("TenantID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("OwnerID");
-
-                    b.HasIndex("RealEstateID");
-
-                    b.HasIndex("TenantID");
-
-                    b.ToTable("RentContracts");
-                });
-
             modelBuilder.Entity("SM.DAL.Models.User", b =>
                 {
                     b.Property<int?>("ID")
@@ -177,27 +146,6 @@ namespace SM.DAL.Migrations
                         .HasForeignKey("UserID");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("SM.DAL.Models.RentContract", b =>
-                {
-                    b.HasOne("SM.DAL.Models.User", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerID");
-
-                    b.HasOne("SM.DAL.Models.RealEstate", "RealEstate")
-                        .WithMany()
-                        .HasForeignKey("RealEstateID");
-
-                    b.HasOne("SM.DAL.Models.User", "Tenant")
-                        .WithMany()
-                        .HasForeignKey("TenantID");
-
-                    b.Navigation("Owner");
-
-                    b.Navigation("RealEstate");
-
-                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("SM.DAL.Models.RealEstate", b =>

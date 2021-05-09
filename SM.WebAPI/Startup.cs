@@ -37,10 +37,15 @@ namespace SM.WebAPI
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddTransient<IDaoUser, DaoUser>();
 			services.AddTransient<IDaoRealEstate, DaoRealEstate>();
+			services.AddTransient<IDaoRent, DaoRent>();
+
 			services.AddTransient<IBllRealEstate, BllRealEstate>();
 			services.AddTransient<IBllUser, BllUser>();
-			services.AddTransient<IDaoUser, DaoUser>();
+			services.AddTransient<IBllRent, BllRent>();
+
+		
 
 			services.AddAutoMapper(typeof(MappingProfile));
 

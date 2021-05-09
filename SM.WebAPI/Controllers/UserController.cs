@@ -46,10 +46,11 @@ namespace SM.WebAPI.Controllers
 
 		}
 
-		//FALTA 
+		//FALTA, Hay que hacerlo desde el browser o poner tiempo de expiracion mas corto y mandar refresh token
 		[HttpPost("logout")]
 		public IActionResult Logout()
 		{
+
 			return Ok("Succesfully disconected");
 		}
 
