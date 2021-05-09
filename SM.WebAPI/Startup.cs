@@ -78,7 +78,8 @@ namespace SM.WebAPI
 				builder.WithOrigins(new[] { "https://localhost:3000", "http://localhost:3000", "http://localhost:44339", "http://127.0.0.1:3000" })
 					   .AllowAnyMethod()
 					   .AllowAnyHeader()
-					   .AllowCredentials();
+					   .AllowCredentials()
+					   .WithExposedHeaders("Authorization");
 			}));
 			services.AddControllers();
 			services.AddSwaggerGen(c =>
@@ -110,8 +111,10 @@ namespace SM.WebAPI
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
-			app.UseAuthentication();
+			app.UseRouting();
 			app.UseCors("AllowOrigin");
+			app.UseAuthentication();
+			app.UseAuthorization();
 
 			if (env.IsDevelopment())
 			{
@@ -121,10 +124,6 @@ namespace SM.WebAPI
 			}
 
 			app.UseHttpsRedirection();
-
-			app.UseRouting();
-
-			app.UseAuthorization();
 
 			app.UseEndpoints(endpoints =>
 			{
