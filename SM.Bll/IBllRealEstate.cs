@@ -15,6 +15,7 @@ namespace SM.Bll
 		Task<RealEstate> UpdateRealEstate(DTOAddRealEstate dto, int realEstateID);
 		Task<IEnumerable<DTOShowRealEstate>> GetAll();
 		Task<IEnumerable<DTOShowRealEstate>> GetRealEstatesByOwner(string email);
+		Task<DTOShowRealEstate> GetRealEstateByID(int id);
 		Task<IEnumerable<DTOShowRealEstate>> GetByMetros(int from, int to);
 		Task<IEnumerable<DTOShowFullDetail>> GetFullDetailsByID(int id);
 	}

@@ -21,6 +21,7 @@ namespace SM.WebAPI.Controllers
 	public class UserController : ControllerBase
 	{
 		private IBllUser _repository;
+		
 		public UserController(IBllUser BllUser)
 		{
 			_repository = BllUser;

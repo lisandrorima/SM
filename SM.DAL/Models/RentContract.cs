@@ -19,7 +19,6 @@ namespace SM.DAL.Models
 		public RealEstate RealEstate { get; set; }
 		public DateTime StartDate { get; set; }
 		public DateTime EndDate { get; set; }
-
-
+		public bool ValidatedByBlockChain { get; set; }
 	}
 }

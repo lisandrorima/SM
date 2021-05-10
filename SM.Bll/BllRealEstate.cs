@@ -88,6 +88,11 @@ namespace SM.Bll
 			return dtos;
 		}
 
-	
+		public async Task<DTOShowRealEstate> GetRealEstateByID(int id)
+		{
+			DTOShowRealEstate dto = new();
+			dto = _mapper.Map<DTOShowRealEstate>(await _DaoRealEstate.GetPropertyByIDAsync(id));
+			return dto;
+		}
 	}
 }

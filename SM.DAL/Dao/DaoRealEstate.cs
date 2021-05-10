@@ -39,6 +39,12 @@ namespace SM.DAL.Dao
 			return await _context.RealEstates.Where(rs => rs.SqMtrs >=from & rs.SqMtrs<=to).Include(r => r.images).ToListAsync();
 		}
 
+		public async Task<RealEstate> GetPropertyByIDAsync(int id)
+		{
+			return await _context.RealEstates.FindAsync(id);
+
+		}
+
 		public async Task<IEnumerable<RealEstate>> GetPropertyDetails(int id)
 		{
 			return await _context.RealEstates.Where(c => c.ID == id).Include(r => r.images).Include(u=>u.User).ToListAsync();

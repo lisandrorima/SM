@@ -16,5 +16,7 @@ namespace SM.Bll
 		Task<User> Update(DTOUser dto, string email);
 		Task Delete(int id);
 		Task<IEnumerable<DTOUser>> GetAll();
+
+		DTOUser GetByEmail(string userdto);
 	}
 }

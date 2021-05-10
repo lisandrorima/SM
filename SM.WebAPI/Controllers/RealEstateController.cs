@@ -68,5 +68,15 @@ namespace SM.WebAPI.Controllers
 
 		}
 
+
+		[AllowAnonymous]
+		[HttpGet]
+		[Route("GetPropByID")]
+		public async Task<DTOShowRealEstate> GetPropByID(int id)
+		{
+			return await _repository.GetRealEstateByID(id);
+
+		}
+
 	}
 }

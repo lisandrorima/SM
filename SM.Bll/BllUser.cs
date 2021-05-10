@@ -14,12 +14,10 @@ namespace SM.Bll
 	{
 
 		private IDaoUser _DaoUser;
-		//private readonly SmartPropDbContext _db;
 		private readonly IMapper _mapper;
 		public BllUser(IDaoUser DaoUser, IMapper mapper)
 		{
 			_DaoUser = DaoUser;
-			//_db = db;
 			_mapper = mapper;
 		}
 
@@ -50,9 +48,11 @@ namespace SM.Bll
 
 		}
 
+
+
+
 		public DTOUser Login(DTOLogin userdto)
 		{
-			//var id = -1;
 
 			var user = _DaoUser.GetByEmail(userdto.Email);
 			var dto = new DTOUser();
@@ -114,6 +114,26 @@ namespace SM.Bll
 			}
 
 			return new User();
+		}
+
+
+		public  DTOUser GetByEmail(string email)
+		{
+
+			var user =  _DaoUser.GetByEmail(email);
+			var dto = new DTOUser();
+
+			if (user != null)
+			{ 
+				dto = _mapper.Map<DTOUser>(user);
+			}
+
+
+			return dto;
+
+
+
+
 		}
 	}
 }

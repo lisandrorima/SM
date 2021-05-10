@@ -22,7 +22,7 @@ namespace SM.Helper
 			var header = new JwtHeader(credentials);
 
 			var claims = new[] {
-
+				
 				new Claim("UserEmail",user.Email.ToString()),
 				new Claim("UserPersonalID", user.PersonalID.ToString()),
 				new Claim("UserName", user.Name.ToString()),

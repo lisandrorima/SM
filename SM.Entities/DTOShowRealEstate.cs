@@ -12,6 +12,7 @@ namespace SM.Entities
 		{
 			ImgURL = new List<DTOImages>();
 		}
+		public int ID { get; set; }
 		public string Address { get; set; }
 		public int RentFee { get; set; }
 		public int RentDurationDays { get; set; }

@@ -21,6 +21,13 @@ namespace SM.WebAPI
 
 			CreateMap<DTOAddRealEstate, RealEstate>();
 
+			CreateMap<DTORentProperty, RentContract>();
+			CreateMap<DTORentProperty, RentContract>().ReverseMap();
+
+			CreateMap<DTORentProperty, RealEstate>();
+			CreateMap<DTORentProperty, RealEstate>().ReverseMap();
+
+
 			CreateMap<DTOImages, ImagesRealEstate>();
 			CreateMap<DTOImages, ImagesRealEstate>().ReverseMap();
 
