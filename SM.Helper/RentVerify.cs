@@ -19,7 +19,7 @@ namespace SM.Helper
 
 		if(fromFront.ID==fromDDBB.ID && fromFront.Address==fromDDBB.Address
                 && fromFront.RentDurationDays == fromDDBB.RentDurationDays && fromFront.RentFee== fromDDBB.RentFee &&
-                fromFront.RentPaymentSchedule == fromDDBB.RentPaymentSchedule)
+                fromFront.RentPaymentSchedule == fromDDBB.RentPaymentSchedule && fromDDBB.Available)
 			{
                 isValid=true;
 			}

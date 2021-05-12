@@ -18,5 +18,8 @@ namespace SM.DAL.Dao_interfaces
 		Task<IEnumerable<RealEstate>> GetPropertyDetails(int id);
 
 		Task<RealEstate> GetPropertyByIDAsync(int id);
+
+		Task<bool> DisableRealEstate(RealEstate realEstate);
+
 	}
 }

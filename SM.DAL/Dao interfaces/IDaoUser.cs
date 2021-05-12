@@ -17,7 +17,7 @@ namespace SM.DAL.Dao_interfaces
 		Task<User> Update(User dto);
 		Task Delete(int id);
 		Task<IEnumerable<User>>GetAll();
-
+		Task<User> GetUserByID(int id);
 
 	}
 }

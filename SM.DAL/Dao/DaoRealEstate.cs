@@ -54,5 +54,22 @@ namespace SM.DAL.Dao
 		{
 			return await _context.RealEstates.Where(c=> c.User.Email == email).Include(r => r.images).ToListAsync();
 		}
+
+		public async Task<bool> DisableRealEstate(RealEstate realEstate)
+		{
+			bool success = false;
+			var modifRealEstate = await _context.RealEstates.FindAsync(realEstate.ID);
+			modifRealEstate.Available = false;
+			try
+			{
+				await _context.SaveChangesAsync();
+				success = true;
+;
+			}
+			catch { }
+			return success;
+			
+		}
+
 	}
 }

@@ -28,13 +28,27 @@ namespace SM.Bll
 		{
 			User tenant = _DaoUser.GetByEmail(userEmail);
 			var REFromDDBB = await _daoRealEstate.GetPropertyByIDAsync(dto.ID);
-
+			
 			DTOShowRealEstate DTOfromDDBB = _mapper.Map<DTOShowRealEstate>(REFromDDBB);
 
 			if (RentVerify.VerifyRent(dto, DTOfromDDBB))
 			{
-				RentContract a = new();
-				await _DaoRent.RentRealEstate(a);
+
+				var owner =await _DaoUser.GetUserByID(REFromDDBB.User.ID.Value);
+
+				RentContract ContractToAdd = new()
+				{
+					Owner = owner,
+					Tenant = tenant,
+					RealEstate = REFromDDBB,
+					StartDate = DateTime.Now,
+					EndDate = DateTime.Now.AddDays(REFromDDBB.RentDurationDays),
+					ValidatedByBlockChain = false
+
+				};
+				await _DaoRent.RentRealEstate(ContractToAdd);
+				await _daoRealEstate.DisableRealEstate(REFromDDBB);
+
 			}
 			
 

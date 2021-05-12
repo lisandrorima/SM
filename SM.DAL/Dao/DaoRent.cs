@@ -10,9 +10,19 @@ namespace SM.DAL.Dao
 {
 	public class DaoRent : IDaoRent
 	{
-		public  Task<RentContract> RentRealEstate(RentContract rent)
+
+		private readonly SmartPropDbContext _context;
+
+		public DaoRent(SmartPropDbContext dbcontext)
 		{
-			throw new NotImplementedException();
+			_context = dbcontext;
+		}
+
+		public  async Task<RentContract> RentRealEstate(RentContract rent)
+		{
+			_context.RentContracts.Add(rent);
+			await _context.SaveChangesAsync();
+			return rent;
 		}
 	}
 }

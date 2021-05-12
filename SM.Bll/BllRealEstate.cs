@@ -94,5 +94,7 @@ namespace SM.Bll
 			dto = _mapper.Map<DTOShowRealEstate>(await _DaoRealEstate.GetPropertyByIDAsync(id));
 			return dto;
 		}
+
+		
 	}
 }
