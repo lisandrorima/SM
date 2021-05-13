@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Security.Claims;
 using SM.Entities;
+using Microsoft.Extensions.Primitives;
 
 namespace SM.Helper
 {
@@ -30,7 +31,7 @@ namespace SM.Helper
 				new Claim("UserWallet", user.WalletAddress.ToString())
 	
 			};
-			var payload = new JwtPayload("SmartProp.com", "SmartProp.com", claims, null, DateTime.Now.AddMinutes(60));
+			var payload = new JwtPayload("SmartProp.com", "SmartProp.com", claims, null, DateTime.Now.AddMinutes(5), DateTime.Now);
 
 			var securityToken = new JwtSecurityToken(header, payload);
 
@@ -66,5 +67,31 @@ namespace SM.Helper
 
 
 		}
+
+		internal static StringValues RefreshToken(ClaimsIdentity claimsIdentity)
+		{
+			var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecureKey));
+			var credentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha512Signature);
+			var header = new JwtHeader(credentials);
+
+			
+
+				var claims = new[] {
+
+				new Claim("UserEmail",claimsIdentity.FindFirst("UserEmail").Value),
+				new Claim("UserPersonalID", claimsIdentity.FindFirst("UserPersonalID").Value),
+				new Claim("UserName", claimsIdentity.FindFirst("UserName").Value),
+				new Claim("UserSurname", claimsIdentity.FindFirst("UserSurname").Value),
+				new Claim("UserWallet", claimsIdentity.FindFirst("UserWallet").Value)
+
+			};
+
+			var payload = new JwtPayload("SmartProp.com", "SmartProp.com", claims, null, DateTime.Now.AddMinutes(5), DateTime.Now);
+
+			var securityToken = new JwtSecurityToken(header, payload);
+
+			return new JwtSecurityTokenHandler().WriteToken(securityToken);
+		}
+
 	}
 }

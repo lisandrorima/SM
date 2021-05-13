@@ -47,7 +47,6 @@ namespace SM.WebAPI.Controllers
 
 		}
 
-		//FALTA, Hay que hacerlo desde el browser o poner tiempo de expiracion mas corto y mandar refresh token
 		[HttpPost("logout")]
 		public IActionResult Logout()
 		{
@@ -60,18 +59,14 @@ namespace SM.WebAPI.Controllers
 		public IActionResult Login(DTOLogin userdto)
 		{
 			var user = _repository.Login(userdto);
-			
+
 			if (user.Email == null)
-			{
 				return BadRequest();
-			}
-			else
-			{
-				
-				var jwt = GenerateJWT(user);
-				Response.Headers.Add("Authorization", jwt);
-				return Ok(jwt);
-			}
+
+			var jwt = GenerateJWT(user);
+			Response.Headers.Add("Authorization", jwt);
+			return Ok(jwt);
+			
 
 		}
 
@@ -90,13 +85,10 @@ namespace SM.WebAPI.Controllers
 			
 
 				if(_repository.Update(userdto, email).Result.ID != null)
-				{
 					return Ok("success");
-				}
-				else
-				{
-					return Unauthorized("You don't have the correct privileges to perform this action");
-				}
+				
+				return Unauthorized("You don't have the correct privileges to perform this action");
+				
 					
 			}
 			catch(Exception)

@@ -33,9 +33,18 @@ namespace SM.WebAPI.Controllers
 		{
 
 			string email = GetEmailByHttpContext();
-			var a = await _Rentrepository.Rent(dto,email);
-			
-			return Ok();
+			try
+			{
+				await _Rentrepository.Rent(dto, email);
+				return Ok();
+
+			}
+			catch
+			{
+				return BadRequest();
+			}
+
+
 		}
 
 		private string GetEmailByHttpContext()

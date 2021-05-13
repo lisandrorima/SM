@@ -68,7 +68,10 @@ namespace SM.WebAPI
 					ValidateIssuer = true,
 					ValidIssuer= Configuration.GetSection("Jwt")["TokenIssuer"],
 					ValidateAudience = true,
-					ValidAudience= Configuration.GetSection("Jwt")["TokenAudience"]
+					ValidAudience= Configuration.GetSection("Jwt")["TokenAudience"],
+					ValidateLifetime=true,
+					RequireExpirationTime = true,
+					ClockSkew = TimeSpan.Zero
 				};
 			});
 
@@ -114,6 +117,7 @@ namespace SM.WebAPI
 			app.UseRouting();
 			app.UseCors("AllowOrigin");
 			app.UseAuthentication();
+			app.UseMiddleware<JwtTokenSlidingExpirationMiddleware>();
 			app.UseAuthorization();
 
 			if (env.IsDevelopment())
