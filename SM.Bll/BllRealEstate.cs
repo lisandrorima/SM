@@ -95,6 +95,30 @@ namespace SM.Bll
 			return dto;
 		}
 
-		
+		public async Task<IEnumerable<DTOShowRealEstate>> GetRelacionado(string localidad)
+		{
+			IEnumerable<RealEstate> realEstates;
+			if (localidad == null)
+			{
+				realEstates = await _DaoRealEstate.GetRelated();
+			}
+			else
+			{
+				realEstates = await _DaoRealEstate.GetRelated(localidad);
+			}
+			
+
+			List<DTOShowRealEstate> dtos = new List<DTOShowRealEstate>();
+
+			foreach (var realEstate in realEstates)
+			{
+
+				dtos.Add(_mapper.Map<DTOShowRealEstate>(realEstate));
+			}
+
+			return dtos;
+
+
+		}
 	}
 }

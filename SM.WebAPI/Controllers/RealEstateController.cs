@@ -32,6 +32,15 @@ namespace SM.WebAPI.Controllers
 			return _repository.GetAll();
 		}
 
+
+		[AllowAnonymous]
+		[HttpGet]
+		[Route("getRelacionados")]
+		public Task<IEnumerable<DTOShowRealEstate>> GetByCiudad(string localidad)
+		{
+			return _repository.GetRelacionado(localidad);
+		}
+
 		[AllowAnonymous]
 		[HttpGet]
 		[Route("areaFilter")]

@@ -71,5 +71,15 @@ namespace SM.DAL.Dao
 			
 		}
 
+		public async Task<IEnumerable<RealEstate>> GetRelated(string localidad)
+		{
+			return await _context.RealEstates.Where(R => R.Available & R.Localidad==localidad).Include(r => r.images).OrderBy(r => Guid.NewGuid()).Take(3).ToListAsync();
+		}
+
+		public async Task<IEnumerable<RealEstate>> GetRelated()
+		{
+			return await _context.RealEstates.Where(R => R.Available).Include(r => r.images).OrderBy(r => Guid.NewGuid()).Take(3).ToListAsync();
+
+		}
 	}
 }

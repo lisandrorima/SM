@@ -21,5 +21,10 @@ namespace SM.DAL.Dao_interfaces
 
 		Task<bool> DisableRealEstate(RealEstate realEstate);
 
+		Task<IEnumerable<RealEstate>> GetRelated(string localidad);
+		Task<IEnumerable<RealEstate>> GetRelated();
+
+		
+
 	}
 }
