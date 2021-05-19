@@ -1,4 +1,5 @@
 ﻿using SM.DAL.Models;
+using SM.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,6 @@ namespace SM.DAL.Dao_interfaces
 		Task<IEnumerable<RealEstate>> GetRelated(string localidad);
 		Task<IEnumerable<RealEstate>> GetRelated();
 
-		
-
+		Task<IEnumerable<RealEstate>> Getfiltered(RealEstateFilter request);
 	}
 }

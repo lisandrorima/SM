@@ -19,5 +19,6 @@ namespace SM.Bll
 		Task<IEnumerable<DTOShowRealEstate>> GetByMetros(int from, int to);
 		Task<IEnumerable<DTOShowFullDetail>> GetFullDetailsByID(int id);
 		Task<IEnumerable<DTOShowRealEstate>> GetRelacionado(string ciudad);
+		Task<IEnumerable<DTOShowRealEstate>> Getfiltered(RealEstateFilter realEstateFilter);
 	}
 }

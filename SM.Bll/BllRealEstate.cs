@@ -120,5 +120,24 @@ namespace SM.Bll
 
 
 		}
+
+		public async Task<IEnumerable<DTOShowRealEstate>> Getfiltered(RealEstateFilter realEstateFilter)
+		{
+		
+
+			var realEstates = await _DaoRealEstate.Getfiltered(realEstateFilter);
+			List<DTOShowRealEstate> dtos = new List<DTOShowRealEstate>();
+
+			foreach (var realEstate in realEstates)
+			{
+
+				dtos.Add(_mapper.Map<DTOShowRealEstate>(realEstate));
+			}
+
+			return dtos;
+		}
+
+		
+
 	}
 }

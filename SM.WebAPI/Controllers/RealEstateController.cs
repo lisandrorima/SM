@@ -87,5 +87,14 @@ namespace SM.WebAPI.Controllers
 
 		}
 
+		[AllowAnonymous]
+		[HttpPost]
+		[Route("Getfiltered")]
+		public async Task<IEnumerable<DTOShowRealEstate>> GerfilteredRealEstateList(RealEstateFilter realEstateFilter) 
+		{
+			return await _repository.Getfiltered(realEstateFilter);
+
+		}
+
 	}
 }

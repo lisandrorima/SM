@@ -81,5 +81,130 @@ namespace SM.DAL.Dao
 			return await _context.RealEstates.Where(R => R.Available).Include(r => r.images).OrderBy(r => Guid.NewGuid()).Take(3).ToListAsync();
 
 		}
+
+		public async Task<IEnumerable<RealEstate>> Getfiltered(RealEstateFilter request)
+		{
+			return await GetWithFilterquery(request).Include(r => r.images).ToListAsync();
+
+		}
+
+
+		private IQueryable<RealEstate> GetWithFilterquery(RealEstateFilter request)
+		{
+			var query = _context.RealEstates.AsQueryable();
+			
+			#region AreaFilter
+			if (request.MinArea != null || request.MaxArea != null)
+			{
+				if (request.MinArea != null && request.MaxArea != null)
+				{
+					query = query.Where(x => x.SqMtrs >= request.MinArea && x.SqMtrs <= request.MaxArea);
+				}
+				else
+				{
+					if (request.MinArea == null && request.MaxArea != null)
+					{
+						query = query.Where(x => x.SqMtrs <= request.MaxArea);
+					}
+					else
+					{
+						if (request.MinArea != null && request.MaxArea == null)
+						{
+							query = query.Where(x => x.SqMtrs >= request.MinArea);
+						}
+					}
+				}
+
+			}
+			#endregion
+
+			#region PriceFilter
+			if (request.MinPrice != null || request.MaxPrice != null)
+			{
+				if (request.MinPrice != null && request.MaxPrice != null)
+				{
+					query = query.Where(x => x.RentFee >= request.MinPrice && x.RentFee <= request.MaxPrice);
+				}
+				else
+				{
+					if (request.MinPrice == null && request.MaxPrice != null)
+					{
+						query = query.Where(x => x.RentFee <= request.MaxPrice);
+					}
+					else
+					{
+						if (request.MinPrice != null && request.MaxPrice == null)
+						{
+							query = query.Where(x => x.RentFee >= request.MinPrice);
+						}
+					}
+				}
+
+			}
+			#endregion
+
+			#region BathroomFilter
+			if (request.Minbathrooms != null || request.MaxBathrooms != null)
+			{
+				if (request.Minbathrooms != null && request.MaxBathrooms != null)
+				{
+					query = query.Where(x => x.BathRoomQty >= request.Minbathrooms && x.BathRoomQty <= request.MaxBathrooms);
+				}
+				else
+				{
+					if (request.MinPrice == null && request.MaxPrice != null)
+					{
+						query = query.Where(x => x.BathRoomQty <= request.MaxBathrooms);
+					}
+					else
+					{
+						if (request.MinPrice != null && request.MaxPrice == null)
+						{
+							query = query.Where(x => x.BathRoomQty >= request.Minbathrooms);
+						}
+					}
+				}
+
+			}
+			#endregion
+
+			#region RoomsFilter
+			if (request.MinRooms != null || request.MaxRooms != null)
+			{
+				if (request.MinRooms != null && request.MaxRooms != null)
+				{
+					query = query.Where(x => x.Rooms >= request.MinRooms && x.Rooms <= request.MaxRooms);
+				}
+				else
+				{
+					if (request.MinRooms == null && request.MaxRooms != null)
+					{
+						query = query.Where(x => x.Rooms <= request.MaxRooms);
+					}
+					else
+					{
+						if (request.MinRooms != null && request.MaxRooms == null)
+						{
+							query = query.Where(x => x.Rooms >= request.MinRooms);
+						}
+					}
+				}
+
+			}
+			#endregion
+
+			if (!string.IsNullOrEmpty(request.Localidad))
+			{
+				query = query.Where(x => x.Localidad.Equals(request.Localidad));
+			}
+
+			if (request.Garage != null)
+			{
+				query = query.Where(x => x.Localidad.Equals(request.Garage));
+			}
+
+
+			return query;
+		}
 	}
 }
