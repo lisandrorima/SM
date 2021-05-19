@@ -41,7 +41,7 @@ namespace SM.DAL.Dao
 
 		public async Task<RealEstate> GetPropertyByIDAsync(int id)
 		{
-			return await _context.RealEstates.FindAsync(id);
+			return await _context.RealEstates.Where(rs => rs.ID==id).Include(r => r.images).FirstAsync();
 
 		}
 
