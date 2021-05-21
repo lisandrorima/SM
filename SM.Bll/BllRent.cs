@@ -26,7 +26,7 @@ namespace SM.Bll
 		}
 		public async Task<DTORentProperty> Rent(DTORentProperty dto, string userEmail)
 		{
-			User tenant = _DaoUser.GetByEmail(userEmail);
+			User tenant =  await _DaoUser.GetByEmail(userEmail);
 			var REFromDDBB = await _daoRealEstate.GetPropertyByIDAsync(dto.ID);
 			
 			DTOShowRealEstate DTOfromDDBB = _mapper.Map<DTOShowRealEstate>(REFromDDBB);

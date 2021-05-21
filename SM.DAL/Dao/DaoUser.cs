@@ -66,9 +66,9 @@ namespace SM.DAL.Dao
 
 		}
 
-		public User GetByEmail(string email)
+		public async Task<User> GetByEmail(string email)
 		{
-			return _context.Users.Where(u => u.Email == email).FirstOrDefault();
+			return await _context.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
 		}
 
 	

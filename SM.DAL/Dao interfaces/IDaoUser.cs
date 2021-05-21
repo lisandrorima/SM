@@ -13,7 +13,7 @@ namespace SM.DAL.Dao_interfaces
 	{
 		Task<User> Register(User user);
 		User GetByDNI(int id);
-		User GetByEmail(string email);
+		Task<User> GetByEmail(string email);    
 		Task<User> Update(User dto);
 		Task Delete(int id);
 		Task<IEnumerable<User>>GetAll();

@@ -92,83 +92,42 @@ namespace SM.DAL.Dao
 		private IQueryable<RealEstate> GetWithFilterquery(RealEstateFilter request)
 		{
 			var query = _context.RealEstates.AsQueryable();
-			
-			#region AreaFilter
-			if (request.MinArea != null || request.MaxArea != null)
+
+			query = AddAreaFiler(request, query);
+
+			query = AddMaxPriceFiler(request, query);
+
+			query = AddBathroomFilter(request, query);
+			query = AddRoomsFilter(request, query);
+			query = AddLocalidadFiter(request, query);
+
+			query = AddGarageFilter(request, query);
+
+			return query;
+		}
+
+		private static IQueryable<RealEstate> AddGarageFilter(RealEstateFilter request, IQueryable<RealEstate> query)
+		{
+			if (request.Garage != null)
 			{
-				if (request.MinArea != null && request.MaxArea != null)
-				{
-					query = query.Where(x => x.SqMtrs >= request.MinArea && x.SqMtrs <= request.MaxArea);
-				}
-				else
-				{
-					if (request.MinArea == null && request.MaxArea != null)
-					{
-						query = query.Where(x => x.SqMtrs <= request.MaxArea);
-					}
-					else
-					{
-						if (request.MinArea != null && request.MaxArea == null)
-						{
-							query = query.Where(x => x.SqMtrs >= request.MinArea);
-						}
-					}
-				}
-
+				query = query.Where(x => x.Localidad.Equals(request.Garage));
 			}
-			#endregion
 
-			#region PriceFilter
-			if (request.MinPrice != null || request.MaxPrice != null)
+			return query;
+		}
+
+		private static IQueryable<RealEstate> AddLocalidadFiter(RealEstateFilter request, IQueryable<RealEstate> query)
+		{
+			if (!string.IsNullOrEmpty(request.Localidad))
 			{
-				if (request.MinPrice != null && request.MaxPrice != null)
-				{
-					query = query.Where(x => x.RentFee >= request.MinPrice && x.RentFee <= request.MaxPrice);
-				}
-				else
-				{
-					if (request.MinPrice == null && request.MaxPrice != null)
-					{
-						query = query.Where(x => x.RentFee <= request.MaxPrice);
-					}
-					else
-					{
-						if (request.MinPrice != null && request.MaxPrice == null)
-						{
-							query = query.Where(x => x.RentFee >= request.MinPrice);
-						}
-					}
-				}
-
+				query = query.Where(x => x.Localidad.Equals(request.Localidad));
 			}
-			#endregion
 
-			#region BathroomFilter
-			if (request.Minbathrooms != null || request.MaxBathrooms != null)
-			{
-				if (request.Minbathrooms != null && request.MaxBathrooms != null)
-				{
-					query = query.Where(x => x.BathRoomQty >= request.Minbathrooms && x.BathRoomQty <= request.MaxBathrooms);
-				}
-				else
-				{
-					if (request.MinPrice == null && request.MaxPrice != null)
-					{
-						query = query.Where(x => x.BathRoomQty <= request.MaxBathrooms);
-					}
-					else
-					{
-						if (request.MinPrice != null && request.MaxPrice == null)
-						{
-							query = query.Where(x => x.BathRoomQty >= request.Minbathrooms);
-						}
-					}
-				}
+			return query;
+		}
 
-			}
-			#endregion
-
-			#region RoomsFilter
+		private static IQueryable<RealEstate> AddRoomsFilter(RealEstateFilter request, IQueryable<RealEstate> query)
+		{
 			if (request.MinRooms != null || request.MaxRooms != null)
 			{
 				if (request.MinRooms != null && request.MaxRooms != null)
@@ -191,18 +150,90 @@ namespace SM.DAL.Dao
 				}
 
 			}
-			#endregion
 
-			if (!string.IsNullOrEmpty(request.Localidad))
+			return query;
+		}
+
+		private static IQueryable<RealEstate> AddBathroomFilter(RealEstateFilter request, IQueryable<RealEstate> query)
+		{
+			if (request.Minbathrooms != null || request.MaxBathrooms != null)
 			{
-				query = query.Where(x => x.Localidad.Equals(request.Localidad));
+				if (request.Minbathrooms != null && request.MaxBathrooms != null)
+				{
+					query = query.Where(x => x.BathRoomQty >= request.Minbathrooms && x.BathRoomQty <= request.MaxBathrooms);
+				}
+				else
+				{
+					if (request.MinPrice == null && request.MaxPrice != null)
+					{
+						query = query.Where(x => x.BathRoomQty <= request.MaxBathrooms);
+					}
+					else
+					{
+						if (request.MinPrice != null && request.MaxPrice == null)
+						{
+							query = query.Where(x => x.BathRoomQty >= request.Minbathrooms);
+						}
+					}
+				}
+
 			}
 
-			if (request.Garage != null)
+			return query;
+		}
+
+		private static IQueryable<RealEstate> AddMaxPriceFiler(RealEstateFilter request, IQueryable<RealEstate> query)
+		{
+			if (request.MinPrice != null || request.MaxPrice != null)
 			{
-				query = query.Where(x => x.Localidad.Equals(request.Garage));
+				if (request.MinPrice != null && request.MaxPrice != null)
+				{
+					query = query.Where(x => x.RentFee >= request.MinPrice && x.RentFee <= request.MaxPrice);
+				}
+				else
+				{
+					if (request.MinPrice == null && request.MaxPrice != null)
+					{
+						query = query.Where(x => x.RentFee <= request.MaxPrice);
+					}
+					else
+					{
+						if (request.MinPrice != null && request.MaxPrice == null)
+						{
+							query = query.Where(x => x.RentFee >= request.MinPrice);
+						}
+					}
+				}
+
 			}
 
+			return query;
+		}
+
+		private static IQueryable<RealEstate> AddAreaFiler(RealEstateFilter request, IQueryable<RealEstate> query)
+		{
+			if (request.MinArea != null || request.MaxArea != null)
+			{
+				if (request.MinArea != null && request.MaxArea != null)
+				{
+					query = query.Where(x => x.SqMtrs >= request.MinArea && x.SqMtrs <= request.MaxArea);
+				}
+				else
+				{
+					if (request.MinArea == null && request.MaxArea != null)
+					{
+						query = query.Where(x => x.SqMtrs <= request.MaxArea);
+					}
+					else
+					{
+						if (request.MinArea != null && request.MaxArea == null)
+						{
+							query = query.Where(x => x.SqMtrs >= request.MinArea);
+						}
+					}
+				}
+
+			}
 
 			return query;
 		}

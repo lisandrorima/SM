@@ -56,9 +56,9 @@ namespace SM.WebAPI.Controllers
 
 		[AllowAnonymous]
 		[HttpPost("login")]
-		public IActionResult Login(DTOLogin userdto)
+		public async Task<IActionResult> Login(DTOLogin userdto)
 		{
-			var user = _repository.Login(userdto);
+			var user = await _repository.Login(userdto);
 
 			if (user.Email == null)
 				return BadRequest();

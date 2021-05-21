@@ -51,15 +51,15 @@ namespace SM.Bll
 
 
 
-		public DTOUser Login(DTOLogin userdto)
+		public async Task<DTOUser> Login(DTOLogin userdto)
 		{
 
-			var user = _DaoUser.GetByEmail(userdto.Email);
+			var user = await _DaoUser.GetByEmail(userdto.Email);
 			var dto = new DTOUser();
 
 			if (user != null)
 			{
-				if (BCrypt.Net.BCrypt.Verify(userdto.Password, user.Password))
+				if (BCrypt.Net.BCrypt.Verify(userdto.Password, user.Password) && userdto.Email==user.Email)
 				{
 					dto = _mapper.Map<DTOUser>(user);
 				}
@@ -97,8 +97,8 @@ namespace SM.Bll
 		public async Task<User> Update(DTOUser dto, string email)
 		{
 			var userFromDTO = _mapper.Map<User>(dto);
-			User userFromDTOValidate = _DaoUser.GetByEmail(userFromDTO.Email);
-			User fromDDBBwithEMail = _DaoUser.GetByEmail(dto.Email);
+			User userFromDTOValidate = await _DaoUser.GetByEmail(userFromDTO.Email);
+			User fromDDBBwithEMail = await _DaoUser.GetByEmail(dto.Email);
 			
 
 			
