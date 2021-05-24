@@ -236,6 +236,113 @@ namespace SM.Tests
 			userFromDDBB.Should().BeOfType<User>();
 			userFromDDBB.Should().BeEquivalentTo(userRegistrado);
 		}
+
+		[Fact]
+		public async Task Register_ShouldReturnExceptionWhenDaoInsertFail()
+		{
+			//arrange
+			DTOUser dtoUser = new DTOUser
+			{
+
+				Name = "Name1",
+				Surname = "Surname2",
+				PersonalID = 12345678,
+				WalletAddress = "ax00123fjsHS_",
+				Email = "asd@asd.com",
+				Password = "password1"
+
+			};
+
+
+
+			User userRegistrado = new User
+			{
+				ID = 1,
+				Name = "Name1",
+				Surname = "Surname2",
+				PersonalID = 12345678,
+				WalletAddress = "ax00123fjsHS_",
+				Email = "asd@asd.com",
+				Password = BCrypt.Net.BCrypt.HashPassword("password1")
+
+			};
+
+			Exception e = new Exception();
+			_DaoUser.Setup(m => m.Register(It.IsAny<User>())).ThrowsAsync(e);
+			
+
+			//Act
+			var userFromDDBB = new User();
+			try
+			{
+				userFromDDBB = await _sut.Register(dtoUser);
+			}
+			catch (Exception)
+			{
+
+			}
+			
+
+			//assert
+			Assert.NotNull(e);
+			Assert.IsType<Exception>(e);
+
+		}
+
+
+		/*
+		[Fact]
+		public async Task Modificar_ShouldReturnUsuarioModificadoWhenSuccess()
+		{
+			//arrange
+			DTOUser dtoUser = new DTOUser
+			{
+
+				Name = "Name1",
+				Surname = "Surname2",
+				PersonalID = 12345678,
+				WalletAddress = "ax00123fjsHS_",
+				Email = "asd@asd.com",
+				Password = "password1"
+
+			};
+
+
+
+			User userRegistrado = new User
+			{
+				ID = 1,
+				Name = "Name1",
+				Surname = "Surname2",
+				PersonalID = 12345678,
+				WalletAddress = "ax00123fjsHS_",
+				Email = "asd@asd.com",
+				Password = BCrypt.Net.BCrypt.HashPassword("password1")
+
+			};
+
+			Exception e = new Exception();
+			_DaoUser.Setup(m => m.Register(It.IsAny<User>())).ThrowsAsync(e);
+
+
+			//Act
+			var userFromDDBB = new User();
+			try
+			{
+				userFromDDBB = await _sut.Register(dtoUser);
+			}
+			catch (Exception)
+			{
+
+			}
+
+
+			//assert
+			Assert.NotNull(e);
+			Assert.IsType<Exception>(e);
+
+		}*/
 	}
+
 
 }

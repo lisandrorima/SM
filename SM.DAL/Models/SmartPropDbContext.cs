@@ -26,6 +26,7 @@ namespace SM.DAL.Models
         public DbSet<RealEstate> RealEstates { get; set; }
         public DbSet<RentContract> RentContracts { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Provincia> Provincias { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -43,8 +44,19 @@ namespace SM.DAL.Models
             modelBuilder.HasAnnotation("Relational:Collation", "Modern_Spanish_CI_AS");
 
             modelBuilder.Entity<User>()
-          .HasIndex(p => new { p.Email, p.PersonalID })
+          .HasIndex(p => new { p.Email})
           .IsUnique(true);
+
+            modelBuilder.Entity<User>()
+      .HasIndex(p => new { p.PersonalID })
+      .IsUnique(true);
+
+            modelBuilder.Entity<Provincia>()
+      .HasIndex(p => new { p.Nombre })
+      .IsUnique(true);
+
+
+
 
             OnModelCreatingPartial(modelBuilder);
         }

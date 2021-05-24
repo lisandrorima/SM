@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SM.DAL.Models;
 
 namespace SM.DAL.Migrations
 {
     [DbContext(typeof(SmartPropDbContext))]
-    partial class SmartPropDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210524132940_hash2")]
+    partial class hash2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,23 +40,6 @@ namespace SM.DAL.Migrations
                     b.HasIndex("RealEstateID");
 
                     b.ToTable("ImagesRealEstate");
-                });
-
-            modelBuilder.Entity("SM.DAL.Models.Provincia", b =>
-                {
-                    b.Property<int>("ID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Nombre")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("Nombre")
-                        .IsUnique()
-                        .HasFilter("[Nombre] IS NOT NULL");
-
-                    b.ToTable("Provincias");
                 });
 
             modelBuilder.Entity("SM.DAL.Models.RealEstate", b =>
@@ -85,9 +70,6 @@ namespace SM.DAL.Migrations
                     b.Property<string>("Localidad")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProvinciaID")
-                        .HasColumnType("int");
-
                     b.Property<int>("RentDurationDays")
                         .HasColumnType("int");
 
@@ -107,8 +89,6 @@ namespace SM.DAL.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("ProvinciaID");
 
                     b.HasIndex("UserID");
 
@@ -206,15 +186,9 @@ namespace SM.DAL.Migrations
 
             modelBuilder.Entity("SM.DAL.Models.RealEstate", b =>
                 {
-                    b.HasOne("SM.DAL.Models.Provincia", "Provincia")
-                        .WithMany()
-                        .HasForeignKey("ProvinciaID");
-
                     b.HasOne("SM.DAL.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserID");
-
-                    b.Navigation("Provincia");
 
                     b.Navigation("User");
                 });

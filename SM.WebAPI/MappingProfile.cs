@@ -31,11 +31,17 @@ namespace SM.WebAPI
 			CreateMap<DTOImages, ImagesRealEstate>();
 			CreateMap<DTOImages, ImagesRealEstate>().ReverseMap();
 
+			CreateMap<DTOProvincia, Provincia>();
+			CreateMap<DTOProvincia, Provincia>().ReverseMap();
+
 			CreateMap<DTOShowRealEstate, RealEstate>()
-				.ForMember(s => s.images, c => c.MapFrom(m => m.ImgURL));
+				.ForMember(s => s.images, c => c.MapFrom(m => m.ImgURL))
+				.ForMember(s => s.Provincia, c => c.MapFrom(m => m.Provincia));
 
 			CreateMap<DTOShowRealEstate, RealEstate>().ReverseMap()
-				.ForMember(s => s.ImgURL, c => c.MapFrom(m => m.images));
+				.ForMember(s => s.ImgURL, c => c.MapFrom(m => m.images))
+				.ForMember(s => s.Provincia, c => c.MapFrom(m => m.Provincia));
+
 
 
 			CreateMap<DTOShowFullDetail, RealEstate>()
@@ -44,7 +50,9 @@ namespace SM.WebAPI
 
 			CreateMap<DTOShowFullDetail, RealEstate>().ReverseMap()
 				.ForMember(s => s.ImgURL, c => c.MapFrom(m => m.images))
-				.ForMember(s => s.User, c => c.MapFrom(m => m.User)); ;
+				.ForMember(s => s.User, c => c.MapFrom(m => m.User))
+				.ForMember(s => s.Provincia, c => c.MapFrom(m => m.Provincia));
+
 
 
 

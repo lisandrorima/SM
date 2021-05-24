@@ -30,29 +30,29 @@ namespace SM.DAL.Dao
 
 		public async Task<IEnumerable<RealEstate>> GetAllAsync()
 		{
-			return await _context.RealEstates.Where(R => R.Available).Include(r=>r.images).ToListAsync();
+			return await _context.RealEstates.Where(R => R.Available).Include(r=>r.images).Include(p => p.Provincia).ToListAsync();
 
 		}
 
 		public async Task<IEnumerable<RealEstate>> GetFilteredMetros(int from, int to)
 		{
-			return await _context.RealEstates.Where(rs => rs.SqMtrs >=from & rs.SqMtrs<=to).Include(r => r.images).ToListAsync();
+			return await _context.RealEstates.Where(rs => rs.SqMtrs >=from & rs.SqMtrs<=to).Include(r => r.images).Include(p => p.Provincia).ToListAsync();
 		}
 
 		public async Task<RealEstate> GetPropertyByIDAsync(int id)
 		{
-			return await _context.RealEstates.Where(rs => rs.ID==id).Include(r => r.images).FirstAsync();
+			return await _context.RealEstates.Where(rs => rs.ID==id).Include(r => r.images).Include(p => p.Provincia).FirstAsync();
 
 		}
 
 		public async Task<IEnumerable<RealEstate>> GetPropertyDetails(int id)
 		{
-			return await _context.RealEstates.Where(c => c.ID == id).Include(r => r.images).Include(u=>u.User).ToListAsync();
+			return await _context.RealEstates.Where(c => c.ID == id).Include(r => r.images).Include(p => p.Provincia).Include(u=>u.User).ToListAsync();
 		}
 
 		public async Task<IEnumerable<RealEstate>> GetRealEstatesByOwnerAsync(string email)
 		{
-			return await _context.RealEstates.Where(c=> c.User.Email == email).Include(r => r.images).ToListAsync();
+			return await _context.RealEstates.Where(c=> c.User.Email == email).Include(r => r.images).Include(p => p.Provincia).ToListAsync();
 		}
 
 		public async Task<bool> DisableRealEstate(RealEstate realEstate)
@@ -73,18 +73,18 @@ namespace SM.DAL.Dao
 
 		public async Task<IEnumerable<RealEstate>> GetRelated(string localidad)
 		{
-			return await _context.RealEstates.Where(R => R.Available & R.Localidad==localidad).Include(r => r.images).OrderBy(r => Guid.NewGuid()).Take(3).ToListAsync();
+			return await _context.RealEstates.Where(R => R.Available & R.Localidad==localidad).Include(r => r.images).Include(p => p.Provincia).OrderBy(r => Guid.NewGuid()).Take(3).ToListAsync();
 		}
 
 		public async Task<IEnumerable<RealEstate>> GetRelated()
 		{
-			return await _context.RealEstates.Where(R => R.Available).Include(r => r.images).OrderBy(r => Guid.NewGuid()).Take(3).ToListAsync();
+			return await _context.RealEstates.Where(R => R.Available).Include(r => r.images).Include(p => p.Provincia).OrderBy(r => Guid.NewGuid()).Take(3).ToListAsync();
 
 		}
 
 		public async Task<IEnumerable<RealEstate>> Getfiltered(RealEstateFilter request)
 		{
-			return await GetWithFilterquery(request).Include(r => r.images).ToListAsync();
+			return await GetWithFilterquery(request).Include(r => r.images).Include(p=>p.Provincia).ToListAsync();
 
 		}
 

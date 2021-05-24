@@ -27,6 +27,8 @@ namespace SM.DAL.Models
 
 		public string Localidad { get; set; }
 		public User User { get; set; }
+		public Provincia Provincia { get; set; }
+
 		public List<ImagesRealEstate> images { get; set; }
 
 	}

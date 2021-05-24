@@ -131,9 +131,6 @@ namespace SM.Bll
 
 			return dto;
 
-
-
-
 		}
 	}
 }

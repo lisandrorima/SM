@@ -24,6 +24,7 @@ namespace SM.Entities
 		public int BathRoomQty { get; set; }
 		public bool Garage { get; set; }
 		public bool Available { get; set; }
+		public DTOProvincia Provincia { get; set; }
 		public List<DTOImages> ImgURL { get; set; }
 	}
 }

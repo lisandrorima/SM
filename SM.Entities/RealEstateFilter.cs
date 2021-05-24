@@ -8,6 +8,7 @@ namespace SM.Entities
 {
 	public class RealEstateFilter
 	{
+		public DTOProvincia Provincia { get; set; }
 		public string Localidad { get; set; }
 		public int? MinArea { get; set; }
 		public int? MaxArea { get; set; }
@@ -18,6 +19,8 @@ namespace SM.Entities
 		public int? Minbathrooms { get; set; }
 		public int? MaxBathrooms { get; set; }
 		public bool? Garage { get; set; }
+
+
 
 	}
 }
