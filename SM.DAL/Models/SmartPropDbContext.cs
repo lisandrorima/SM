@@ -27,6 +27,7 @@ namespace SM.DAL.Models
         public DbSet<RentContract> RentContracts { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Provincia> Provincias { get; set; }
+        public DbSet<CuponDePago> CuponDePagos { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -55,7 +56,16 @@ namespace SM.DAL.Models
       .HasIndex(p => new { p.Nombre })
       .IsUnique(true);
 
+            modelBuilder.Entity<RentContract>()
+  .HasIndex(p => new { p.Hash})
+  .IsUnique(true);
 
+            modelBuilder.Entity<CuponDePago>()
+  .HasIndex(p => new { p.HashCuponPago })
+  .IsUnique(true);
+
+            modelBuilder.Entity<CuponDePago>()
+.HasAlternateKey(x => x.HashCuponPago);
 
 
             OnModelCreatingPartial(modelBuilder);

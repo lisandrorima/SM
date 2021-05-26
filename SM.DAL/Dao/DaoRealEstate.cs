@@ -110,7 +110,11 @@ namespace SM.DAL.Dao
 		{
 			if (request.Garage != null)
 			{
-				query = query.Where(x => x.Localidad.Equals(request.Garage));
+				if (request.Garage.Value)
+				{
+					query = query.Where(x => x.Garage.Equals(request.Garage));
+				}
+				
 			}
 
 			return query;

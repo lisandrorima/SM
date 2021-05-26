@@ -44,14 +44,15 @@ namespace SM.Bll
 					Tenant = tenant,
 					RealEstate = REFromDDBB,
 					StartDate = DateTime.Now,
-					EndDate = DateTime.Now.AddDays(REFromDDBB.RentDurationDays),
+					EndDate = DateTime.Now.AddMonths(REFromDDBB.RentDurationDays),
 					ValidatedByBlockChain = false,
 					Hash = ""
 
 				};
-				ContractToAdd.Hash = GenerateHash(ContractToAdd);
+				ContractToAdd.Hash = GenerateHashContrato(ContractToAdd);
 
-				await _DaoRent.RentRealEstate(ContractToAdd);
+				await _DaoRent.AddCupones( GenerateCupones(await _DaoRent.RentRealEstate(ContractToAdd),REFromDDBB));
+
 				await _daoRealEstate.DisableRealEstate(REFromDDBB);
 
 			}
@@ -60,7 +61,26 @@ namespace SM.Bll
 			 return dto;
 		}
 
-		private string GenerateHash(RentContract contract)
+		public async Task<IEnumerable<DTOCuponPago>> MisCupones(string email)
+		{
+			User user = await _DaoUser.GetByEmail(email);
+			DTOCuponPago cuponDTO = new DTOCuponPago();
+			List<DTOCuponPago> listcuponDTO = new List<DTOCuponPago>();
+			
+			if (user!=null)
+			{
+				var cupones =await _DaoRent.GetCupones(user);
+				foreach (var cupon in cupones)
+				{
+					listcuponDTO.Add(_mapper.Map<DTOCuponPago>(cupon));
+				}
+			}
+
+			return listcuponDTO;
+		}
+
+
+		private string GenerateHashContrato(RentContract contract)
 		{
 			
 
@@ -91,5 +111,70 @@ namespace SM.Bll
 
 			
 		}
+
+		private List<CuponDePago> GenerateCupones(RentContract contract, RealEstate realEstate)
+		{
+			List<CuponDePago> cupones = new List<CuponDePago>();
+
+
+			for (int i = 0; i < realEstate.RentPaymentSchedule; i++)
+			{
+				CuponDePago cupon = new CuponDePago();
+
+				cupon.IsPayed = false;
+				cupon.rentContract = contract;
+				cupon.FechaVencimiento = GenerateFechaVencimiento(cupon, i, contract);
+				cupon.HashCuponPago = GenerateHashCupon(cupon);
+
+				cupones.Add(cupon);
+			}
+
+			return cupones;
+		}
+
+		private string GenerateHashCupon(CuponDePago cupon)
+		{
+
+			using (SHA256 sha256Hash = SHA256.Create())
+			{
+				ASCIIEncoding encoding = new ASCIIEncoding();
+				StringBuilder sb = new StringBuilder();
+				sb.Append(cupon.ID);
+				sb.Append(cupon.FechaVencimiento);
+				sb.Append(cupon.IsPayed);
+				sb.Append(cupon.rentContract);
+
+
+
+
+
+				// ComputeHash - returns byte array  
+				byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(sb.ToString()));
+
+				// Convert byte array to a string   
+				StringBuilder builder = new StringBuilder();
+				for (int i = 0; i < bytes.Length; i++)
+				{
+					builder.Append(bytes[i].ToString("x2"));
+				}
+				return builder.ToString();
+			}
+		}
+
+		private DateTime GenerateFechaVencimiento(CuponDePago cupon, int i,RentContract contract)
+		{
+			if (i == 0)
+			{
+				cupon.FechaVencimiento = contract.StartDate.AddDays(1);
+			}
+			else
+			{
+				cupon.FechaVencimiento = contract.StartDate.AddMonths(i);
+			}
+
+			return cupon.FechaVencimiento;
+		}
+
+		
 	}
 }

@@ -34,6 +34,18 @@ namespace SM.WebAPI
 			CreateMap<DTOProvincia, Provincia>();
 			CreateMap<DTOProvincia, Provincia>().ReverseMap();
 
+			CreateMap<DTOContract, RentContract>();
+			CreateMap<DTOContract, RentContract>().ReverseMap();
+
+
+			CreateMap<DTOCuponPago, CuponDePago>()
+				.ForPath(dest => dest.rentContract.ID, opts => opts.MapFrom(src => src.RentContractID));
+
+			CreateMap<DTOCuponPago, CuponDePago>().ReverseMap()
+
+				.ForPath(dest => dest.RentContractID, opts => opts.MapFrom(src => src.rentContract.ID));
+
+
 			CreateMap<DTOShowRealEstate, RealEstate>()
 				.ForMember(s => s.images, c => c.MapFrom(m => m.ImgURL))
 				.ForMember(s => s.Provincia, c => c.MapFrom(m => m.Provincia));

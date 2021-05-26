@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SM.DAL.Models;
 
 namespace SM.DAL.Migrations
 {
     [DbContext(typeof(SmartPropDbContext))]
-    partial class SmartPropDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210526014032_CuponDePago")]
+    partial class CuponDePago
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +24,7 @@ namespace SM.DAL.Migrations
 
             modelBuilder.Entity("SM.DAL.Models.CuponDePago", b =>
                 {
-                    b.Property<int?>("ID")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);

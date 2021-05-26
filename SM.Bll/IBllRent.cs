@@ -11,5 +11,6 @@ namespace SM.Bll
 	public interface IBllRent
 	{
 		Task<DTORentProperty> Rent(DTORentProperty dto, string Useremail);
+		Task<IEnumerable<DTOCuponPago>> MisCupones(string email);
 	}
 }

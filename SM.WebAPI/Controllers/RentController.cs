@@ -57,5 +57,28 @@ namespace SM.WebAPI.Controllers
 			}
 			return email;
 		}
+
+		[Authorize]
+		[HttpGet]
+		[Route("MisCupones")]
+
+		public async Task<IActionResult> GetCuponesAsync()
+		{
+
+			string email = GetEmailByHttpContext();
+			try
+			{
+				return Ok(await _Rentrepository.MisCupones(email));
+			
+			}
+			catch
+			{
+				return BadRequest();
+
+			}
+
+
+		}
+
 	}
 }

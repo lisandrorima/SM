@@ -10,5 +10,7 @@ namespace SM.DAL.Dao_interfaces
 	public interface IDaoRent
 	{
 		Task<RentContract> RentRealEstate(RentContract rent);
+		Task<IEnumerable<CuponDePago>> AddCupones(List<CuponDePago> cupones);
+		Task<IEnumerable<CuponDePago>> GetCupones(User user);
 	}
 }
