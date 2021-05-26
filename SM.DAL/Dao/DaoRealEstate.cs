@@ -93,6 +93,8 @@ namespace SM.DAL.Dao
 		{
 			var query = _context.RealEstates.AsQueryable();
 
+			query = query.Where(r => r.Available);
+
 			query = AddAreaFiler(request, query);
 
 			query = AddMaxPriceFiler(request, query);
@@ -241,5 +243,7 @@ namespace SM.DAL.Dao
 
 			return query;
 		}
+
+		
 	}
 }

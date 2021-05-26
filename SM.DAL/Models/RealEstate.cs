@@ -24,11 +24,9 @@ namespace SM.DAL.Models
 		public int BathRoomQty { get; set; }
 		public bool Garage { get; set; }
 		public bool Available { get; set; }
-
 		public string Localidad { get; set; }
 		public User User { get; set; }
 		public Provincia Provincia { get; set; }
-
 		public List<ImagesRealEstate> images { get; set; }
 
 	}
