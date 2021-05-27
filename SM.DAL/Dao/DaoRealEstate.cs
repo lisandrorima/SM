@@ -41,7 +41,7 @@ namespace SM.DAL.Dao
 
 		public async Task<RealEstate> GetPropertyByIDAsync(int id)
 		{
-			return await _context.RealEstates.Where(rs => rs.ID==id).Include(r => r.images).Include(p => p.Provincia).FirstAsync();
+			return await _context.RealEstates.Where(rs => rs.ID == id).Include(u => u.User).Include(r => r.images).Include(p => p.Provincia).FirstOrDefaultAsync();
 
 		}
 
@@ -88,6 +88,22 @@ namespace SM.DAL.Dao
 
 		}
 
+		public async Task DeleteProp(RealEstate prop)
+		{
+			try
+			{
+
+				_context.RealEstates.Remove(prop);
+
+				await _context.SaveChangesAsync();
+			}
+			catch (InvalidOperationException)
+			{
+				throw;
+			}
+
+		}
+
 
 		private IQueryable<RealEstate> GetWithFilterquery(RealEstateFilter request)
 		{
@@ -107,6 +123,7 @@ namespace SM.DAL.Dao
 
 			return query;
 		}
+		
 
 		private static IQueryable<RealEstate> AddGarageFilter(RealEstateFilter request, IQueryable<RealEstate> query)
 		{

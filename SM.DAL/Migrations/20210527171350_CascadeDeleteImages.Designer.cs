@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SM.DAL.Models;
 
 namespace SM.DAL.Migrations
 {
     [DbContext(typeof(SmartPropDbContext))]
-    partial class SmartPropDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210527171350_CascadeDeleteImages")]
+    partial class CascadeDeleteImages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -234,7 +236,7 @@ namespace SM.DAL.Migrations
             modelBuilder.Entity("SM.DAL.Models.CuponDePago", b =>
                 {
                     b.HasOne("SM.DAL.Models.RentContract", "rentContract")
-                        .WithMany("cupones")
+                        .WithMany()
                         .HasForeignKey("rentContractID");
 
                     b.Navigation("rentContract");
@@ -289,11 +291,6 @@ namespace SM.DAL.Migrations
             modelBuilder.Entity("SM.DAL.Models.RealEstate", b =>
                 {
                     b.Navigation("images");
-                });
-
-            modelBuilder.Entity("SM.DAL.Models.RentContract", b =>
-                {
-                    b.Navigation("cupones");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using SM.DAL.Dao_interfaces;
 using SM.DAL.Models;
 using SM.Entities;
@@ -137,7 +138,43 @@ namespace SM.Bll
 			return dtos;
 		}
 
-		
 
+
+
+		public async Task<DTOShowRealEstate> DeletePropiedad(int id, string email)
+		{
+			var prop= await _DaoRealEstate.GetPropertyByIDAsync(id);
+			DTOShowRealEstate dto = null ;
+			try
+			{
+				if (ValidateProp(prop,email))
+				{
+						await _DaoRealEstate.DeleteProp(prop);
+						dto = _mapper.Map<DTOShowRealEstate>(prop);
+				}
+				
+
+			}
+			catch (InvalidOperationException ){return dto;}
+
+
+			return dto;
+		}
+
+
+		private bool ValidateProp(RealEstate prop, string email)
+		{
+			bool isValid = false;
+
+			if (prop != null)
+			{
+				if (prop.User.Email == email && !prop.Available)
+				{
+					isValid = true;
+				}
+			}
+
+			return isValid;
+		}
 	}
 }

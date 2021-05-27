@@ -20,5 +20,6 @@ namespace SM.Bll
 		Task<IEnumerable<DTOShowFullDetail>> GetFullDetailsByID(int id);
 		Task<IEnumerable<DTOShowRealEstate>> GetRelacionado(string ciudad);
 		Task<IEnumerable<DTOShowRealEstate>> Getfiltered(RealEstateFilter realEstateFilter);
+		Task<DTOShowRealEstate> DeletePropiedad(int id, string email);
 	}
 }

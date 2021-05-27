@@ -96,5 +96,28 @@ namespace SM.WebAPI.Controllers
 
 		}
 
+		[Authorize]
+		[HttpDelete]
+		[Route("Borrarmipropiedad")]
+		public async Task<IActionResult> BorrarMiPropiedad(int idProp)
+		{
+			string email = "";
+			var identity = HttpContext.User.Identity as ClaimsIdentity;
+			if (identity != null)
+			{
+				email = identity.FindFirst("UserEmail").Value;
+			}
+
+			if (await _repository.DeletePropiedad(idProp, email) != null)
+			{
+				return Ok();
+			}
+			else
+			{
+				return BadRequest();
+			}
+
+		}
+
 	}
 }

@@ -68,6 +68,12 @@ namespace SM.DAL.Models
 .HasAlternateKey(x => x.HashCuponPago);
 
 
+            modelBuilder.Entity<RealEstate>()
+             .HasMany(e => e.images)
+    .WithOne(e => e.RealEstate)
+    .OnDelete(DeleteBehavior.ClientCascade);
+
+
             OnModelCreatingPartial(modelBuilder);
         }
 

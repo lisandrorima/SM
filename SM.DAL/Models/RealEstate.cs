@@ -10,6 +10,7 @@ namespace SM.DAL.Models
 {
 	public class RealEstate
 	{
+		
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int? ID { get; set; }

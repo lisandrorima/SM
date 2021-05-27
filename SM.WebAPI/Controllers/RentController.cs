@@ -80,5 +80,27 @@ namespace SM.WebAPI.Controllers
 
 		}
 
+		[Authorize]
+		[HttpGet]
+		[Route("MisCupones2")]
+
+		public async Task<IActionResult> GetCuponesAsync2()
+		{
+
+			string email = GetEmailByHttpContext();
+			try
+			{
+				return Ok(await _Rentrepository.GetDTOContractWithCupons(email));
+
+			}
+			catch
+			{
+				return BadRequest();
+
+			}
+
+
+		}
+
 	}
 }

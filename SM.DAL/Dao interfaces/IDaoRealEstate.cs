@@ -26,5 +26,6 @@ namespace SM.DAL.Dao_interfaces
 		Task<IEnumerable<RealEstate>> GetRelated();
 
 		Task<IEnumerable<RealEstate>> Getfiltered(RealEstateFilter request);
+		Task DeleteProp(RealEstate prop);
 	}
 }

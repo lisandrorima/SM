@@ -33,8 +33,15 @@ namespace SM.DAL.Dao
 		{
 			var contratos= await _context.RentContracts.Where(c => c.Tenant == user).ToListAsync();
 
+
 			return await _context.CuponDePagos.Where(r => contratos.Contains(r.rentContract)).ToListAsync();
 		}
+
+		public async Task<IEnumerable<RentContract>> GetContractWithCupons(User user)
+		{
+			return await _context.RentContracts.Where(c => c.Tenant == user).Include(r=>r.cupones).Include(m=>m.RealEstate).ToListAsync();
+		}
+
 
 		public  async Task<RentContract> RentRealEstate(RentContract rent)
 		{

@@ -55,6 +55,7 @@ namespace SM.WebAPI
 				.ForMember(s => s.Provincia, c => c.MapFrom(m => m.Provincia));
 
 
+			
 
 			CreateMap<DTOShowFullDetail, RealEstate>()
 				.ForMember(s => s.images, c => c.MapFrom(m => m.ImgURL))
@@ -65,6 +66,18 @@ namespace SM.WebAPI
 				.ForMember(s => s.User, c => c.MapFrom(m => m.User))
 				.ForMember(s => s.Provincia, c => c.MapFrom(m => m.Provincia));
 
+			CreateMap<DTOContractWithCupons, RentContract>().ReverseMap()
+				.ForMember(r => r.ContractId, c => c.MapFrom(m => m.ID))
+				.ForPath(dest => dest.Address, opts => opts.MapFrom(src => src.RealEstate.Address))
+				.ForMember(r => r.CuponesDePago, c => c.MapFrom(m => m.cupones));
+				
+
+
+			CreateMap<DTOContractWithCupons, RentContract>()
+				.ForMember(r => r.ID, c => c.MapFrom(m => m.ContractId))
+				.ForPath(dest => dest.RealEstate.Address, opts => opts.MapFrom(src => src.Address))
+
+				.ForMember(r => r.cupones, c => c.MapFrom(m => m.CuponesDePago));
 
 
 
