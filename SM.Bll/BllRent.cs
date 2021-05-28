@@ -134,7 +134,7 @@ namespace SM.Bll
 			List<CuponDePago> cupones = new List<CuponDePago>();
 
 
-			for (int i = 0; i < realEstate.RentPaymentSchedule; i++)
+			for (int i = 0; i < realEstate.RentDurationDays; i++)
 			{
 				CuponDePago cupon = new CuponDePago();
 
