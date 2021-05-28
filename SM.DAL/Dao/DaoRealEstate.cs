@@ -104,6 +104,34 @@ namespace SM.DAL.Dao
 
 		}
 
+		public async Task<RealEstate> UpdateRealEstate(RealEstate updatedProp)
+		{
+			
+			var modifRealEstate = await _context.RealEstates.FindAsync(updatedProp.ID);
+			
+
+			try
+			{
+				modifRealEstate.BathRoomQty = updatedProp.BathRoomQty;
+				modifRealEstate.Rooms = updatedProp.Rooms;
+				modifRealEstate.Description = updatedProp.Description;
+				modifRealEstate.RentDurationDays = updatedProp.RentDurationDays;
+				modifRealEstate.SqMtrs = updatedProp.SqMtrs;
+				modifRealEstate.Garage = updatedProp.Garage;
+				modifRealEstate.BedRoomQty = updatedProp.BedRoomQty;
+				modifRealEstate.RentPaymentSchedule = updatedProp.RentPaymentSchedule;
+				modifRealEstate.RentFee = updatedProp.RentFee;
+				await _context.SaveChangesAsync();
+				return updatedProp;
+			}
+			catch
+			{
+				return null;
+			}
+			
+
+		}
+
 
 		private IQueryable<RealEstate> GetWithFilterquery(RealEstateFilter request)
 		{

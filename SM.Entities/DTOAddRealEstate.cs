@@ -8,6 +8,7 @@ namespace SM.Entities
 {
 	public class DTOAddRealEstate
 	{
+		public int? ID { get; set; }
 		public string Address { get; set; }
 		public int RentFee { get; set; }
 		public int RentDurationDays { get; set; }
@@ -19,7 +20,7 @@ namespace SM.Entities
 		public int BathRoomQty { get; set; }
 		public bool Garage { get; set; }
 		public bool Available { get; set; }
-
+		public string Localidad { get; set; }
 		public DTOProvincia Provincia { get; set; }
 	}
 }

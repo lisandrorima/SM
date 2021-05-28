@@ -70,9 +70,23 @@ namespace SM.Bll
 			throw new NotImplementedException();
 		}
 
-		public Task<RealEstate> UpdateRealEstate(DTOAddRealEstate dto, int realEstateID)
+		public async Task<DTOAddRealEstate> UpdateRealEstate(DTOAddRealEstate dto, string email)
 		{
-			throw new NotImplementedException();
+			var propDDBB = await _DaoRealEstate.GetPropertyByIDAsync(dto.ID.Value);
+			RealEstate updatedProp = null;
+
+
+			if (ValidateProp(propDDBB, email))
+			{
+				updatedProp= _mapper.Map<RealEstate>(dto);
+				updatedProp.Address = propDDBB.Address;
+				updatedProp.Localidad = propDDBB.Localidad;
+				updatedProp.Provincia = propDDBB.Provincia;
+				await _DaoRealEstate.UpdateRealEstate(updatedProp);
+				
+			}
+
+			return dto;
 		}
 
 		public async Task<IEnumerable<DTOShowFullDetail>> GetFullDetailsByID(int id)
@@ -139,8 +153,6 @@ namespace SM.Bll
 		}
 
 
-
-
 		public async Task<DTOShowRealEstate> DeletePropiedad(int id, string email)
 		{
 			var prop= await _DaoRealEstate.GetPropertyByIDAsync(id);
@@ -168,7 +180,7 @@ namespace SM.Bll
 
 			if (prop != null)
 			{
-				if (prop.User.Email == email && !prop.Available)
+				if (prop.User.Email == email && prop.Available)
 				{
 					isValid = true;
 				}
