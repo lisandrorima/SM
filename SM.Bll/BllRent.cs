@@ -46,7 +46,7 @@ namespace SM.Bll
 					StartDate = DateTime.Now,
 					EndDate = DateTime.Now.AddMonths(REFromDDBB.RentDurationDays),
 					ValidatedByBlockChain = false,
-					Hash = ""
+					Hash = "",
 					Isvalid = true
 
 				};
