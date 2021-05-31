@@ -47,6 +47,7 @@ namespace SM.Bll
 					EndDate = DateTime.Now.AddMonths(REFromDDBB.RentDurationDays),
 					ValidatedByBlockChain = false,
 					Hash = ""
+					Isvalid = true
 
 				};
 				ContractToAdd.Hash = GenerateHashContrato(ContractToAdd);
@@ -141,6 +142,7 @@ namespace SM.Bll
 				cupon.IsPayed = false;
 				cupon.rentContract = contract;
 				cupon.FechaVencimiento = GenerateFechaVencimiento(cupon, i, contract);
+				cupon.Isvalid = true;
 				cupon.HashCuponPago = GenerateHashCupon(cupon);
 
 				cupones.Add(cupon);
