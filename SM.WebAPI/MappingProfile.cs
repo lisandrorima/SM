@@ -39,9 +39,11 @@ namespace SM.WebAPI
 
 
 			CreateMap<DTOCuponPago, CuponDePago>()
-				.ForPath(dest => dest.rentContract.ID, opts => opts.MapFrom(src => src.RentContractID));
+				.ForPath(dest => dest.rentContract.ID, opts => opts.MapFrom(src => src.RentContractID))
+				.ForPath(dest => dest.rentContract.RealEstate.RentFee, opts => opts.MapFrom(src => src.Monto));
 
 			CreateMap<DTOCuponPago, CuponDePago>().ReverseMap()
+				.ForPath(dest => dest.Monto, opts => opts.MapFrom(src => src.rentContract.RealEstate.RentFee))
 
 				.ForPath(dest => dest.RentContractID, opts => opts.MapFrom(src => src.rentContract.ID));
 
@@ -69,8 +71,11 @@ namespace SM.WebAPI
 			CreateMap<DTOContractWithCupons, RentContract>().ReverseMap()
 				.ForMember(r => r.ContractId, c => c.MapFrom(m => m.ID))
 				.ForPath(dest => dest.Address, opts => opts.MapFrom(src => src.RealEstate.Address))
+				.ForPath(dest => dest.Isvalid, opts => opts.MapFrom(src => src.Isvalid))
 				.ForMember(r => r.CuponesDePago, c => c.MapFrom(m => m.cupones));
-				
+
+
+
 
 
 			CreateMap<DTOContractWithCupons, RentContract>()

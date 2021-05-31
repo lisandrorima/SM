@@ -36,7 +36,7 @@ namespace SM.Bll
 					{
 						await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
 					}
-					await Task.Delay(Convert.ToInt32(TimeSpan.FromHours(12).TotalMilliseconds), stoppingToken);
+					await Task.Delay(Convert.ToInt32(TimeSpan.FromHours(1).TotalMilliseconds), stoppingToken);
 				}
 			}
 

@@ -13,5 +13,6 @@ namespace SM.Entities
 		public DateTime FechaVencimiento { get; set; }
 		public bool IsPayed { get; set; }
 		public int RentContractID { get; set; }
+		public int Monto { get; set; }
 	}
 }

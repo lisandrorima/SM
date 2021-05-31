@@ -15,6 +15,7 @@ namespace SM.Entities
 			CuponesDePago = new List<DTOCuponPago>();
 		}
 		public int ContractId { get; set; }
+		public bool Isvalid { get; set; }
 		public string Address { get; set; }
 		public List<DTOCuponPago> CuponesDePago { get; set; }
 	}
