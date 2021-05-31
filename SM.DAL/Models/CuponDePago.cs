@@ -17,6 +17,8 @@ namespace SM.DAL.Models
 		public DateTime FechaVencimiento { get; set; }
 		public bool IsPayed { get; set; }
 		public RentContract rentContract { get; set; }
+		public bool Isvalid { get; set; }
+
 
 	}
 }

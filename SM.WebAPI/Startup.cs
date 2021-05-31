@@ -37,17 +37,19 @@ namespace SM.WebAPI
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddTransient<IDaoUser, DaoUser>();
-			services.AddTransient<IDaoRealEstate, DaoRealEstate>();
-			services.AddTransient<IDaoRent, DaoRent>();
 
-			services.AddTransient<IBllRealEstate, BllRealEstate>();
-			services.AddTransient<IBllUser, BllUser>();
-			services.AddTransient<IBllRent, BllRent>();
+			services.AddScoped<IDaoUser, DaoUser>();
+			services.AddScoped<IDaoRealEstate, DaoRealEstate>();
+			services.AddScoped<IDaoRent, DaoRent>();
+
+			services.AddScoped<IBllRealEstate, BllRealEstate>();
+			services.AddScoped<IBllUser, BllUser>();
+			services.AddScoped<IBllRent, BllRent>();
 
 		
 
 			services.AddAutoMapper(typeof(MappingProfile));
+						services.AddHostedService<BackgroundRentTasks>();
 
 
 			
@@ -109,7 +111,11 @@ namespace SM.WebAPI
 			});
 
 			services.AddDbContext<SmartPropDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+			services.AddHostedService<BackgroundRentTasks>();
+
 		}
+
+
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

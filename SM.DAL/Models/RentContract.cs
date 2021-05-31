@@ -24,5 +24,7 @@ namespace SM.DAL.Models
 		public string Hash { get; set; }
 		public bool ValidatedByBlockChain { get; set; }
 		public List<CuponDePago> cupones { get; set; }
+
+		public bool Isvalid { get; set; }
 	}
 }

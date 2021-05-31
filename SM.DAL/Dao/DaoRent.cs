@@ -49,5 +49,41 @@ namespace SM.DAL.Dao
 			await _context.SaveChangesAsync();
 			return rent;
 		}
+
+		public async Task<int> UpdateCuponesValidity()
+		{
+			List<CuponDePago> cuponesVencidos = await GetCuponesVencidos();
+
+			var contratosVencidos = cuponesVencidos.Select(x => x.rentContract).ToList();
+			List<CuponDePago> AllCuponsOfExpiredContracts = await GetContratosAVencer(contratosVencidos);
+			ExpireCuponsAndContracts(contratosVencidos, AllCuponsOfExpiredContracts);
+
+			return await _context.SaveChangesAsync();
+		}
+
+		private static void ExpireCuponsAndContracts(List<RentContract> contratosVencidos, List<CuponDePago> AllCuponsOfExpiredContracts)
+		{
+			foreach (var contract in contratosVencidos)
+			{
+				contract.Isvalid = false;
+			}
+
+			foreach (var cupon in AllCuponsOfExpiredContracts)
+			{
+				cupon.Isvalid = false;
+			}
+		}
+
+		private async Task<List<CuponDePago>> GetContratosAVencer(List<RentContract> contratosVencidos)
+		{
+			return await _context.CuponDePagos.Where(c => contratosVencidos.Contains(c.rentContract)).ToListAsync();
+		}
+
+		private async Task<List<CuponDePago>> GetCuponesVencidos()
+		{
+			return await _context.CuponDePagos.Where(c => c.FechaVencimiento < DateTime.Now).Include(r => r.rentContract).ToListAsync();
+		}
+
+		
 	}
 }

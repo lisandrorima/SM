@@ -192,6 +192,9 @@ namespace SM.Bll
 			return cupon.FechaVencimiento;
 		}
 
-		
+		public async Task<int> UpdateContractsAndCoupons()
+		{
+			return await _DaoRent.UpdateCuponesValidity();
+		}
 	}
 }
