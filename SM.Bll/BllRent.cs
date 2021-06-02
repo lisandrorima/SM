@@ -97,6 +97,11 @@ namespace SM.Bll
 			return listcuponDTO;
 		}
 
+		public async Task<int> UpdateContractsAndCoupons()
+		{
+			return await _DaoRent.UpdateCuponesValidity();
+		}
+
 
 		private string GenerateHashContrato(RentContract contract)
 		{
@@ -114,20 +119,12 @@ namespace SM.Bll
 
 
 
-				// ComputeHash - returns byte array  
-				byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(sb.ToString()));
+				return CreateHash(sha256Hash, sb);
 
-				// Convert byte array to a string   
-				StringBuilder builder = new StringBuilder();
-				for (int i = 0; i < bytes.Length; i++)
-				{
-					builder.Append(bytes[i].ToString("x2"));
-				}
-				return builder.ToString();
 			}
 
 
-			
+
 		}
 
 		private List<CuponDePago> GenerateCupones(RentContract contract, RealEstate realEstate)
@@ -163,21 +160,20 @@ namespace SM.Bll
 				sb.Append(cupon.IsPayed);
 				sb.Append(cupon.rentContract);
 
-
-
-
-
-				// ComputeHash - returns byte array  
-				byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(sb.ToString()));
-
-				// Convert byte array to a string   
-				StringBuilder builder = new StringBuilder();
-				for (int i = 0; i < bytes.Length; i++)
-				{
-					builder.Append(bytes[i].ToString("x2"));
-				}
-				return builder.ToString();
+				return CreateHash(sha256Hash, sb);
 			}
+		}
+
+		private static string CreateHash(SHA256 sha256Hash, StringBuilder sb)
+		{
+			byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(sb.ToString()));
+
+			StringBuilder builder = new StringBuilder();
+			for (int i = 0; i < bytes.Length; i++)
+			{
+				builder.Append(bytes[i].ToString("x2"));
+			}
+			return "0x" + builder.ToString();
 		}
 
 		private DateTime GenerateFechaVencimiento(CuponDePago cupon, int i,RentContract contract)
@@ -194,9 +190,6 @@ namespace SM.Bll
 			return cupon.FechaVencimiento;
 		}
 
-		public async Task<int> UpdateContractsAndCoupons()
-		{
-			return await _DaoRent.UpdateCuponesValidity();
-		}
+	
 	}
 }
