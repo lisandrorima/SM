@@ -165,7 +165,7 @@ namespace SM.WebAPI.Controllers
 
 
 
-		[Authorize]
+		[AllowAnonymous]
 		[HttpPut]
 		[Route("subirimagen")]
 		public async Task<IActionResult> UploadImage(IFormFile file)
