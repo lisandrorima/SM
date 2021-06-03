@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using SM.DAL.Models;
 using SM.Entities;
 using System;
@@ -21,5 +22,7 @@ namespace SM.Bll
 		Task<IEnumerable<DTOShowRealEstate>> GetRelacionado(string ciudad);
 		Task<IEnumerable<DTOShowRealEstate>> Getfiltered(RealEstateFilter realEstateFilter);
 		Task<DTOShowRealEstate> DeletePropiedad(int id, string email);
+
+		public string validateImage(IFormFile file);
 	}
 }

@@ -10,6 +10,8 @@ using AutoMapper;
 using SM.Helper;
 using System.Text.Json;
 using System.Security.Cryptography;
+using Winista.Mime;
+
 
 namespace SM.Bll
 {

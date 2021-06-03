@@ -1,13 +1,16 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SM.DAL.Dao_interfaces;
 using SM.DAL.Models;
 using SM.Entities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Winista.Mime;
 
 namespace SM.Bll
 {
@@ -187,6 +190,29 @@ namespace SM.Bll
 			}
 
 			return isValid;
+		}
+
+
+		public string validateImage(IFormFile file)
+		{
+			var mimeTypes = new MimeTypes();
+			var mimeType1 = mimeTypes.GetMimeType(ConvertToBytes(file));
+
+			if (file.Length > 10485760)
+				return "El archivo supera los 10MB";
+
+			if (mimeType1.SubType != "jpg" && mimeType1.SubType != "png" && mimeType1.SubType != "jpeg")
+				return "Solo se permiten archivos JPG,JPEG y PNG";
+
+			return null;
+		}
+
+		private byte[] ConvertToBytes(IFormFile image)
+		{
+			byte[] CoverImageBytes = null;
+			BinaryReader reader = new BinaryReader(image.OpenReadStream());
+			CoverImageBytes = reader.ReadBytes((int)image.Length);
+			return CoverImageBytes;
 		}
 	}
 }
