@@ -82,7 +82,7 @@ namespace SM.DAL.Dao
 
 		private async Task<List<CuponDePago>> GetCuponesVencidos()
 		{
-			return await _context.CuponDePagos.Where(c => c.FechaVencimiento < DateTime.Now & c.Isvalid==true).Include(r => r.rentContract).Include(m=>m.rentContract.RealEstate).ToListAsync();
+			return await _context.CuponDePagos.Where(c => c.FechaVencimiento < DateTime.Now & c.Isvalid==true & !c.IsPayed).Include(r => r.rentContract).Include(m=>m.rentContract.RealEstate).ToListAsync();
 		}
 
 		
