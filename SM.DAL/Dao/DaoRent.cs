@@ -55,33 +55,34 @@ namespace SM.DAL.Dao
 			List<CuponDePago> cuponesVencidos = await GetCuponesVencidos();
 
 			var contratosVencidos = cuponesVencidos.Select(x => x.rentContract).ToList();
-			List<CuponDePago> AllCuponsOfExpiredContracts = await GetContratosAVencer(contratosVencidos);
+			List<CuponDePago> AllCuponsOfExpiredContracts = await GetAllCuponesAVencer(contratosVencidos);
 			ExpireCuponsAndContracts(contratosVencidos, AllCuponsOfExpiredContracts);
-
+			SetRealEstateAvailable(contratosVencidos);
 			return await _context.SaveChangesAsync();
+		}
+
+		private static void SetRealEstateAvailable(List<RentContract> contratosVencidos)
+		{
+			contratosVencidos.ForEach(c => c.RealEstate.Available = true);
+
 		}
 
 		private static void ExpireCuponsAndContracts(List<RentContract> contratosVencidos, List<CuponDePago> AllCuponsOfExpiredContracts)
 		{
-			foreach (var contract in contratosVencidos)
-			{
-				contract.Isvalid = false;
-			}
+			
+			contratosVencidos.ForEach(c => c.Isvalid = false);
+			AllCuponsOfExpiredContracts.ForEach(c => c.Isvalid = false);
 
-			foreach (var cupon in AllCuponsOfExpiredContracts)
-			{
-				cupon.Isvalid = false;
-			}
 		}
 
-		private async Task<List<CuponDePago>> GetContratosAVencer(List<RentContract> contratosVencidos)
+		private async Task<List<CuponDePago>> GetAllCuponesAVencer(List<RentContract> contratosVencidos)
 		{
 			return await _context.CuponDePagos.Where(c => contratosVencidos.Contains(c.rentContract)).ToListAsync();
 		}
 
 		private async Task<List<CuponDePago>> GetCuponesVencidos()
 		{
-			return await _context.CuponDePagos.Where(c => c.FechaVencimiento < DateTime.Now).Include(r => r.rentContract).ToListAsync();
+			return await _context.CuponDePagos.Where(c => c.FechaVencimiento < DateTime.Now & c.Isvalid==true).Include(r => r.rentContract).Include(m=>m.rentContract.RealEstate).ToListAsync();
 		}
 
 		

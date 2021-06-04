@@ -22,5 +22,6 @@ namespace SM.Entities
 		public bool Available { get; set; }
 		public string Localidad { get; set; }
 		public DTOProvincia Provincia { get; set; }
+
 	}
 }

@@ -19,7 +19,7 @@ namespace SM.Bll
 
 		private IDaoRealEstate _DaoRealEstate;
 		private readonly IMapper _mapper;
-		public BllRealEstate(IDaoRealEstate daoRealEstate,  IMapper mapper)
+		public BllRealEstate(IDaoRealEstate daoRealEstate, IMapper mapper)
 		{
 			_DaoRealEstate = daoRealEstate;
 			_mapper = mapper;
@@ -31,7 +31,7 @@ namespace SM.Bll
 			List<DTOShowRealEstate> dtos = new List<DTOShowRealEstate>();
 
 			foreach (var realEstate in realEstates)
-			{ 
+			{
 
 				dtos.Add(_mapper.Map<DTOShowRealEstate>(realEstate));
 			}
@@ -56,7 +56,7 @@ namespace SM.Bll
 
 		public async Task<IEnumerable<DTOShowRealEstate>> GetByMetros(int from, int to)
 		{
-			var realEstates = await _DaoRealEstate.GetFilteredMetros(from,to);
+			var realEstates = await _DaoRealEstate.GetFilteredMetros(from, to);
 			List<DTOShowRealEstate> dtos = new List<DTOShowRealEstate>();
 
 			foreach (var realEstate in realEstates)
@@ -81,12 +81,12 @@ namespace SM.Bll
 
 			if (ValidateProp(propDDBB, email))
 			{
-				updatedProp= _mapper.Map<RealEstate>(dto);
+				updatedProp = _mapper.Map<RealEstate>(dto);
 				updatedProp.Address = propDDBB.Address;
 				updatedProp.Localidad = propDDBB.Localidad;
 				updatedProp.Provincia = propDDBB.Provincia;
 				await _DaoRealEstate.UpdateRealEstate(updatedProp);
-				
+
 			}
 
 			return dto;
@@ -124,7 +124,7 @@ namespace SM.Bll
 			{
 				realEstates = await _DaoRealEstate.GetRelated(localidad);
 			}
-			
+
 
 			List<DTOShowRealEstate> dtos = new List<DTOShowRealEstate>();
 
@@ -141,7 +141,7 @@ namespace SM.Bll
 
 		public async Task<IEnumerable<DTOShowRealEstate>> Getfiltered(RealEstateFilter realEstateFilter)
 		{
-		
+
 
 			var realEstates = await _DaoRealEstate.Getfiltered(realEstateFilter);
 			List<DTOShowRealEstate> dtos = new List<DTOShowRealEstate>();
@@ -158,19 +158,19 @@ namespace SM.Bll
 
 		public async Task<DTOShowRealEstate> DeletePropiedad(int id, string email)
 		{
-			var prop= await _DaoRealEstate.GetPropertyByIDAsync(id);
-			DTOShowRealEstate dto = null ;
+			var prop = await _DaoRealEstate.GetPropertyByIDAsync(id);
+			DTOShowRealEstate dto = null;
 			try
 			{
-				if (ValidateProp(prop,email))
+				if (ValidateProp(prop, email))
 				{
-						await _DaoRealEstate.DeleteProp(prop);
-						dto = _mapper.Map<DTOShowRealEstate>(prop);
+					await _DaoRealEstate.DeleteProp(prop);
+					dto = _mapper.Map<DTOShowRealEstate>(prop);
 				}
-				
+
 
 			}
-			catch (InvalidOperationException ){return dto;}
+			catch (InvalidOperationException) { return dto; }
 
 
 			return dto;
@@ -195,14 +195,22 @@ namespace SM.Bll
 
 		public string validateImage(IFormFile file)
 		{
+
 			var mimeTypes = new MimeTypes();
 			var mimeType1 = mimeTypes.GetMimeType(ConvertToBytes(file));
+
+			if (mimeType1==null)
+			{
+				return "Archivo no valido";
+			}
 
 			if (file.Length > 10485760)
 				return "El archivo supera los 10MB";
 
 			if (mimeType1.SubType != "jpg" && mimeType1.SubType != "png" && mimeType1.SubType != "jpeg")
 				return "Solo se permiten archivos JPG,JPEG y PNG";
+
+
 
 			return null;
 		}
