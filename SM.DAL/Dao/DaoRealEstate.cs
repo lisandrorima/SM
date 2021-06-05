@@ -23,6 +23,7 @@ namespace SM.DAL.Dao
 
 		public async Task<RealEstate> AddRealEstate(RealEstate realEstate)
 		{
+			realEstate.Provincia =  await _context.Provincias.Where(r =>r.Nombre == realEstate.Provincia.Nombre).FirstOrDefaultAsync();
 			await _context.RealEstates.AddAsync(realEstate);
 			await _context.SaveChangesAsync();
 			return realEstate;
@@ -289,6 +290,11 @@ namespace SM.DAL.Dao
 			return query;
 		}
 
-		
+		public async  Task<List<ImagesRealEstate>> AddImages(List<ImagesRealEstate> imagesRealEstates)
+		{
+			imagesRealEstates.ForEach( u => _context.ImagesRealEstate.AddAsync(u));
+			await _context.SaveChangesAsync();
+			return imagesRealEstates;
+		}
 	}
 }

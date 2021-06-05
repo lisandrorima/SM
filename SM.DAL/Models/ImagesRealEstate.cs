@@ -13,7 +13,7 @@ namespace SM.DAL.Models
 	{
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public int ID { get; set; }
+		public int? ID { get; set; }
 		public string ImgURL { get; set; }
 		public RealEstate RealEstate { get; set; }
 	}

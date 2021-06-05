@@ -8,6 +8,10 @@ namespace SM.Entities
 {
 	public class DTOAddRealEstate
 	{
+		public DTOAddRealEstate()
+		{
+			ImgURL = new List<DTOImages>();
+		}
 		public int? ID { get; set; }
 		public string Address { get; set; }
 		public int RentFee { get; set; }
@@ -22,6 +26,7 @@ namespace SM.Entities
 		public bool Available { get; set; }
 		public string Localidad { get; set; }
 		public DTOProvincia Provincia { get; set; }
+		public List<DTOImages> ImgURL { get; set; }
 
 	}
 }

@@ -25,6 +25,9 @@ namespace SM.WebAPI.Controllers
 	public class RealEstateController : ControllerBase
 	{
 		private IBllRealEstate _repository;
+
+
+
 		public RealEstateController(IBllRealEstate BllRealEstate)
 		{
 			_repository = BllRealEstate;
@@ -61,16 +64,7 @@ namespace SM.WebAPI.Controllers
 		[Route("getMyRealEstates")]
 		public Task<IEnumerable<DTOShowRealEstate>> GetMyRealEstates()
 		{
-
-
-			string email = "";
-			var identity = HttpContext.User.Identity as ClaimsIdentity;
-			if (identity != null)
-			{
-				email = identity.FindFirst("UserEmail").Value;
-			}
-
-
+			var email = GetEmailFromContext(HttpContext);
 			return _repository.GetRealEstatesByOwner(email);
 		}
 
@@ -107,12 +101,7 @@ namespace SM.WebAPI.Controllers
 		[Route("Borrarmipropiedad")]
 		public async Task<IActionResult> BorrarMiPropiedad(int idProp)
 		{
-			string email = "";
-			var identity = HttpContext.User.Identity as ClaimsIdentity;
-			if (identity != null)
-			{
-				email = identity.FindFirst("UserEmail").Value;
-			}
+			var email = GetEmailFromContext(HttpContext);
 
 			if (await _repository.DeletePropiedad(idProp, email) != null)
 			{
@@ -130,12 +119,7 @@ namespace SM.WebAPI.Controllers
 		[Route("Modificarmipropiedad")]
 		public async Task<IActionResult> ModificarMiPropiedad(DTOAddRealEstate prop)
 		{
-			string email = "";
-			var identity = HttpContext.User.Identity as ClaimsIdentity;
-			if (identity != null)
-			{
-				email = identity.FindFirst("UserEmail").Value;
-			}
+			var email = GetEmailFromContext(HttpContext);
 
 			if (await _repository.UpdateRealEstate(prop, email) != null)
 			{
@@ -148,32 +132,43 @@ namespace SM.WebAPI.Controllers
 
 		}
 
-
-		/*[Authorize]
-		[HttpPut]
-		[Route("altamipropiedad")]
-		public async Task<IActionResult> AltaMiPropiedad(DTOAddRealEstate prop)
+		private string GetEmailFromContext(HttpContext context)
 		{
+
 			string email = "";
+
 			var identity = HttpContext.User.Identity as ClaimsIdentity;
 			if (identity != null)
 			{
 				email = identity.FindFirst("UserEmail").Value;
 			}
 
-		}*/
+			return email;
+		}
+
+		[Authorize]
+		[HttpPost]
+		[Route("altamipropiedad")]
+		public async Task<IActionResult> AltaMiPropiedad(DTOAddRealEstate prop)
+		{
+			var email = GetEmailFromContext(HttpContext);
+
+			await _repository.AddRealEstate(prop, email);
+		
+			return Ok();
+		}
+		
 
 
-
-		[AllowAnonymous]
+		[Authorize]
 		[HttpPut]
 		[Route("subirimagen")]
 		public async Task<IActionResult> UploadImage(IFormFile file)
 		{
 			string url = "";
-
-			if(_repository.validateImage(file)!=null)
-				return BadRequest(_repository.validateImage(file));
+			var validated = _repository.validateImage(file);
+			if (validated != null)
+				return BadRequest(validated.ToString());
 			
 			var credentials = new BasicAWSCredentials("AKIA5LZCIECLMXRCIGU4", "fieG1W90YQblzXLifAxOd36sjhNCc2EB71s8G0lj");
 			var config = new AmazonS3Config

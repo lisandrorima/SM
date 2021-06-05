@@ -18,11 +18,13 @@ namespace SM.Bll
 	{
 
 		private IDaoRealEstate _DaoRealEstate;
+		private IDaoUser _DaoUser;
 		private readonly IMapper _mapper;
-		public BllRealEstate(IDaoRealEstate daoRealEstate, IMapper mapper)
+		public BllRealEstate(IDaoRealEstate daoRealEstate, IMapper mapper, IDaoUser daoUser)
 		{
 			_DaoRealEstate = daoRealEstate;
 			_mapper = mapper;
+			_DaoUser = daoUser;
 		}
 
 		public async Task<IEnumerable<DTOShowRealEstate>> GetAll()
@@ -68,9 +70,28 @@ namespace SM.Bll
 			return dtos;
 		}
 
-		public Task<RealEstate> AddRealEstate(DTOAddRealEstate realEstatedto)
+		public async Task<RealEstate> AddRealEstate(DTOAddRealEstate dto, string email)
 		{
-			throw new NotImplementedException();
+
+			RealEstate ReToPersist = _mapper.Map<RealEstate>(dto);
+			
+			ReToPersist.User =  await _DaoUser.GetByEmail(email);
+			var RealEstate= await _DaoRealEstate.AddRealEstate(ReToPersist);
+
+			List<ImagesRealEstate> imagenes = new List<ImagesRealEstate>();
+
+			foreach (var imagen in dto.ImgURL)
+			{
+				ImagesRealEstate img = new ImagesRealEstate();
+				img.ImgURL = imagen.ImgURL;
+				img.RealEstate = RealEstate;
+				imagenes.Add(img);
+			}
+
+			await _DaoRealEstate.AddImages(imagenes);
+
+			return null;
+
 		}
 
 		public async Task<DTOAddRealEstate> UpdateRealEstate(DTOAddRealEstate dto, string email)

@@ -17,9 +17,13 @@ namespace SM.WebAPI
 			CreateMap<DTOUserReDetail, User>();
 			CreateMap<DTOUserReDetail, User>().ReverseMap();
 
-			
 
-			CreateMap<DTOAddRealEstate, RealEstate>();
+
+			CreateMap<DTOAddRealEstate, RealEstate>()
+				.ForMember(s => s.images, c => c.MapFrom(m => m.ImgURL));
+			
+			CreateMap<DTOAddRealEstate, RealEstate>().ReverseMap()
+				.ForMember(s => s.ImgURL, c => c.MapFrom(m => m.images));
 
 			CreateMap<DTORentProperty, RentContract>();
 			CreateMap<DTORentProperty, RentContract>().ReverseMap();
