@@ -21,6 +21,7 @@ using SM.Helper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using SM.SmartContractInteraction;
 
 namespace SM.WebAPI
 {
@@ -49,7 +50,8 @@ namespace SM.WebAPI
 		
 
 			services.AddAutoMapper(typeof(MappingProfile));
-						services.AddHostedService<BackgroundRentTasks>();
+			services.AddHostedService<BackgroundRentTasks>();
+			services.AddHostedService<EventListenerWeb3>();
 
 
 			

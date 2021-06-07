@@ -192,6 +192,40 @@ namespace SM.Bll
 			return cupon.FechaVencimiento;
 		}
 
-	
+		public async Task<IEnumerable<DTOpaymentVerification>> GetAllValidCouponsWithRealEstate()
+		{
+			var cuponDePagos = await _DaoRent.GetContractWithCuponsForPaymentVerification();
+			List<DTOpaymentVerification> cuponesValidos = new List<DTOpaymentVerification>();
+
+
+			foreach (var item in cuponDePagos)
+			{
+				DTOpaymentVerification verifiacion = new DTOpaymentVerification();
+
+				verifiacion.Inquilino = item.rentContract.Tenant.WalletAddress;
+				verifiacion.Propietario = item.rentContract.Owner.WalletAddress;
+				verifiacion.Monto = item.rentContract.RealEstate.RentFee;
+				verifiacion.Cupon = item.HashCuponPago;
+
+				cuponesValidos.Add(verifiacion);
+			}
+
+
+			return cuponesValidos;
+		}
+
+		public async Task<int> ValidarCupones(List<DTOpaymentVerification> cuponesAModificar)
+		{
+			List<string> cupones = new List<string>();
+			CuponDePago cupon = new CuponDePago();
+
+
+			foreach (var item in cuponesAModificar)
+			{ 
+				cupones.Add(item.Cupon);
+			}
+
+			return await _DaoRent.UpdatePagados(cupones);
+		}
 	}
 }

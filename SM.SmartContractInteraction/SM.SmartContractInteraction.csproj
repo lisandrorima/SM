@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LanguageExt.Core" Version="3.4.15" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Nethereum.ABI" Version="3.8.0" />
+    <PackageReference Include="Nethereum.BlockchainProcessing" Version="3.8.0" />
+    <PackageReference Include="Nethereum.Web3" Version="3.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SM.Bll\SM.Bll.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -42,8 +42,17 @@ namespace SM.DAL.Dao
 			return await _context.RentContracts.Where(c => c.Tenant == user).Include(r=>r.cupones).Include(m=>m.RealEstate).Include(o=>o.Owner).ToListAsync();
 		}
 
+		public async Task<IEnumerable<CuponDePago>> GetContractWithCuponsForPaymentVerification()
+		{
+			var contratos = await _context.RentContracts.Where(c => c.Isvalid).ToListAsync();
 
-		public  async Task<RentContract> RentRealEstate(RentContract rent)
+
+			return await _context.CuponDePagos.Where(r => contratos.Contains(r.rentContract)).Include(c=>c.rentContract).Include(r=>r.rentContract.RealEstate).Include(b=>b.rentContract.Owner).Include(v=>v.rentContract.Tenant).ToListAsync();
+		}
+
+
+
+		public async Task<RentContract> RentRealEstate(RentContract rent)
 		{
 			_context.RentContracts.Add(rent);
 			await _context.SaveChangesAsync();
@@ -85,6 +94,16 @@ namespace SM.DAL.Dao
 			return await _context.CuponDePagos.Where(c => c.FechaVencimiento < DateTime.Now & c.Isvalid==true & !c.IsPayed).Include(r => r.rentContract).Include(m=>m.rentContract.RealEstate).ToListAsync();
 		}
 
-		
+		public async Task<int> UpdatePagados(List<string> cupones)
+		{
+				var cuponesAModificar = await _context.CuponDePagos.Where(c => cupones.Contains(c.HashCuponPago)).ToListAsync();
+				cuponesAModificar.ForEach(c => c.IsPayed = true);
+			return await _context.SaveChangesAsync();
+
+
+			
+
+
+		}
 	}
 }

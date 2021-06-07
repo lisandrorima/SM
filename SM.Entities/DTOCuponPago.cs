@@ -14,7 +14,6 @@ namespace SM.Entities
 		public bool IsPayed { get; set; }
 		public int RentContractID { get; set; }
 		public int Monto { get; set; }
-
 		public string OwnerWallet { get; set; }
 	}
 }

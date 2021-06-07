@@ -24,6 +24,7 @@
     <ProjectReference Include="..\SM.Bll\SM.Bll.csproj" />
     <ProjectReference Include="..\SM.Entities\SM.Entities.csproj" />
     <ProjectReference Include="..\SM.Helper\SM.Helper.csproj" />
+    <ProjectReference Include="..\SM.SmartContractInteraction\SM.SmartContractInteraction.csproj" />
   </ItemGroup>
 
 </Project>
