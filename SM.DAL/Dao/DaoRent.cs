@@ -94,10 +94,21 @@ namespace SM.DAL.Dao
 			return await _context.CuponDePagos.Where(c => c.FechaVencimiento < DateTime.Now & c.Isvalid==true & !c.IsPayed).Include(r => r.rentContract).Include(m=>m.rentContract.RealEstate).ToListAsync();
 		}
 
-		public async Task<int> UpdatePagados(List<string> cupones)
+		public async Task<int> UpdatePagados(List<CuponDePago> cupones)
 		{
-				var cuponesAModificar = await _context.CuponDePagos.Where(c => cupones.Contains(c.HashCuponPago)).ToListAsync();
-				cuponesAModificar.ForEach(c => c.IsPayed = true);
+
+			
+
+
+			List<string> hashCoupons = cupones.Select(i => i.HashCuponPago).ToList();
+
+			var cuponesAModificar = await _context.CuponDePagos.Where(c => hashCoupons.Contains(c.HashCuponPago)).ToListAsync();
+
+			cuponesAModificar.ForEach(c => c.IsPayed = true);
+			cuponesAModificar.ForEach(c => c.MinedOnBlock = cupones.Where(r => r.HashCuponPago == c.HashCuponPago).FirstOrDefault().MinedOnBlock);
+			cuponesAModificar.ForEach(c => c.TXHash = cupones.Where(r => r.HashCuponPago == c.HashCuponPago).FirstOrDefault().TXHash);
+
+			var a = 0;
 			return await _context.SaveChangesAsync();
 
 

@@ -14,6 +14,8 @@ namespace SM.SmartContractInteraction
 		public string propietario { get; set; }
 
 		public string cupon { get; set; }
+		public string TXHash { get; set; }
+		public string MinedOnBlock { get; set; }
 
 		public BigInteger monto { get; set; }
 		public BigInteger montoPropietario { get; set; }

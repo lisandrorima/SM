@@ -16,6 +16,6 @@ namespace SM.DAL.Dao_interfaces
 		Task<int> UpdateCuponesValidity();
 
 		Task<IEnumerable<CuponDePago>> GetContractWithCuponsForPaymentVerification();
-		Task<int> UpdatePagados(List<string> cupones);
+		Task<int> UpdatePagados(List<CuponDePago> cupones);
 	}
 }

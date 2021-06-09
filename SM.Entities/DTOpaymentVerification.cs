@@ -12,6 +12,8 @@ namespace SM.Entities
 		public string Inquilino { get; set; }
 		public string Propietario { get; set; }
 		public int Monto { get; set; }
+		public string TXHash { get; set; }
+		public string MinedOnBlock { get; set; }
 
 	}
 }
