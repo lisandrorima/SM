@@ -13,8 +13,8 @@ namespace SM.DAL.Dao_interfaces
 		Task<IEnumerable<CuponDePago>> AddCupones(List<CuponDePago> cupones);
 		Task<IEnumerable<CuponDePago>> GetCupones(User user);
 		Task<IEnumerable<RentContract>> GetContractWithCupons(User user);
+		Task<IEnumerable<RentContract>> GetContractWithCuponsOwner(User user);
 		Task<int> UpdateCuponesValidity();
-
 		Task<IEnumerable<CuponDePago>> GetContractWithCuponsForPaymentVerification();
 		Task<int> UpdatePagados(List<CuponDePago> cupones);
 	}

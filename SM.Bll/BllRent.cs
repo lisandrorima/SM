@@ -99,6 +99,23 @@ namespace SM.Bll
 			return listcuponDTO;
 		}
 
+		public async Task<IEnumerable<DTOContractWithCupons>> GetDTOContractWithCuponsOwner(string email)
+		{
+			User user = await _DaoUser.GetByEmail(email);
+			List<DTOContractWithCupons> listcuponDTO = new List<DTOContractWithCupons>();
+
+			if (user != null)
+			{
+				var ContractWithCoupon = await _DaoRent.GetContractWithCuponsOwner(user);
+				foreach (var contract in ContractWithCoupon)
+				{
+					listcuponDTO.Add(_mapper.Map<DTOContractWithCupons>(contract));
+				}
+			}
+
+			return listcuponDTO;
+		}
+
 		public async Task<int> UpdateContractsAndCoupons()
 		{
 			return await _DaoRent.UpdateCuponesValidity();

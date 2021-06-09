@@ -99,6 +99,26 @@ namespace SM.WebAPI.Controllers
 
 			}
 
+		}
+
+		[Authorize]
+		[HttpGet]
+		[Route("ownercoupons")]
+
+		public async Task<IActionResult> GetOwnerCupons()
+		{
+
+			string email = GetEmailByHttpContext();
+			try
+			{
+				return Ok(await _Rentrepository.GetDTOContractWithCuponsOwner(email));
+
+			}
+			catch
+			{
+				return BadRequest();
+
+			}
 
 		}
 

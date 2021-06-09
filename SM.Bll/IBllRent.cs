@@ -13,6 +13,7 @@ namespace SM.Bll
 		Task<DTORentProperty> Rent(DTORentProperty dto, string Useremail);
 		Task<IEnumerable<DTOCuponPago>> MisCupones(string email);
 		Task<IEnumerable<DTOContractWithCupons>> GetDTOContractWithCupons(string email);
+		Task<IEnumerable<DTOContractWithCupons>> GetDTOContractWithCuponsOwner(string email);
 		Task<int> UpdateContractsAndCoupons();
 		Task<IEnumerable<DTOpaymentVerification>> GetAllValidCouponsWithRealEstate();
 		Task<int> ValidarCupones(List<DTOpaymentVerification> cuponesAModificar);

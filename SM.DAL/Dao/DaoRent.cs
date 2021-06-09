@@ -42,6 +42,12 @@ namespace SM.DAL.Dao
 			return await _context.RentContracts.Where(c => c.Tenant == user).Include(r=>r.cupones).Include(m=>m.RealEstate).Include(o=>o.Owner).ToListAsync();
 		}
 
+
+		public async Task<IEnumerable<RentContract>> GetContractWithCuponsOwner(User user)
+		{
+			return await _context.RentContracts.Where(c => c.Owner == user).Include(r => r.cupones).Include(m => m.RealEstate).Include(o => o.Owner).ToListAsync();
+		}
+
 		public async Task<IEnumerable<CuponDePago>> GetContractWithCuponsForPaymentVerification()
 		{
 			var contratos = await _context.RentContracts.Where(c => c.Isvalid).ToListAsync();
@@ -66,15 +72,11 @@ namespace SM.DAL.Dao
 			var contratosVencidos = cuponesVencidos.Select(x => x.rentContract).ToList();
 			List<CuponDePago> AllCuponsOfExpiredContracts = await GetAllCuponesAVencer(contratosVencidos);
 			ExpireCuponsAndContracts(contratosVencidos, AllCuponsOfExpiredContracts);
-			SetRealEstateAvailable(contratosVencidos);
+		
 			return await _context.SaveChangesAsync();
 		}
 
-		private static void SetRealEstateAvailable(List<RentContract> contratosVencidos)
-		{
-			contratosVencidos.ForEach(c => c.RealEstate.Available = true);
 
-		}
 
 		private static void ExpireCuponsAndContracts(List<RentContract> contratosVencidos, List<CuponDePago> AllCuponsOfExpiredContracts)
 		{
