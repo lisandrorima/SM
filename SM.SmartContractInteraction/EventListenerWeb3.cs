@@ -29,7 +29,7 @@ namespace SM.SmartContractInteraction
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                  
+
 
                 using (var scope = _scopeFactory.CreateScope())
                 {
@@ -37,7 +37,7 @@ namespace SM.SmartContractInteraction
                     {
                         var bllRent = scope.ServiceProvider.GetRequiredService<IBllRent>();
                         var result = await bllRent.GetAllValidCouponsWithRealEstate();
-                        var pagos =await GetAllEvents();
+                        var pagos = await GetAllEvents();
                         var CuponesAModificar = ContrastacionDePagos(result, pagos);
                         await bllRent.ValidarCupones(CuponesAModificar);
 
@@ -46,7 +46,7 @@ namespace SM.SmartContractInteraction
                     {
                         await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
                     }
-                    await Task.Delay(Convert.ToInt32(TimeSpan.FromMinutes(20).TotalMilliseconds), stoppingToken);
+                    await Task.Delay(Convert.ToInt32(TimeSpan.FromSeconds(20).TotalMilliseconds), stoppingToken);
                 }
             }
 
@@ -92,7 +92,19 @@ namespace SM.SmartContractInteraction
         {
           'indexed': false,
           'internalType': 'uint256',
-          'name': 'monto',
+          'name': 'montoTotal',
+          'type': 'uint256'
+        },
+        {
+          'indexed': false,
+          'internalType': 'uint256',
+          'name': 'montoPropietario',
+          'type': 'uint256'
+        },
+        {
+          'indexed': false,
+          'internalType': 'uint256',
+          'name': 'montoComison',
           'type': 'uint256'
         }
       ],
@@ -135,7 +147,7 @@ namespace SM.SmartContractInteraction
   ]";
 
 			//address del contrato, una vez que este deployado cambiar a la ultima version
-			var contractAddress = "0x4Cf5D2c09a14B45a1050C9536991d0460DccCE75";
+			var contractAddress = "0x34b8D546679799C5B491E108781c5c78AF16e891";
 
 			//crea instncia de web3 con esa red
 			var web3 = new Web3(url);

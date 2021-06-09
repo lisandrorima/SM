@@ -16,5 +16,7 @@ namespace SM.SmartContractInteraction
 		public string cupon { get; set; }
 
 		public BigInteger monto { get; set; }
+		public BigInteger montoPropietario { get; set; }
+		public BigInteger montoComision { get; set; }
 	}
 }

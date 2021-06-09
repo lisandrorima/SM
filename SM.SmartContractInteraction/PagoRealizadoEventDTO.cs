@@ -25,5 +25,11 @@ namespace SM.SmartContractInteraction
 
 		[Parameter("uint", "monto", 4, false)]
 		public BigInteger monto { get; set; }
+
+		[Parameter("uint", "montoPropietario", 5, false)]
+		public BigInteger montoPropietario { get; set; }
+
+		[Parameter("uint", "montoComison", 6, false)]
+		public BigInteger montoComison { get; set; }
 	}
 }
