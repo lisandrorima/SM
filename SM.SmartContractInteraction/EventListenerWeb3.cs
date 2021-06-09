@@ -181,7 +181,10 @@ namespace SM.SmartContractInteraction
 				pago.inquilino = item.Event.inquilino;
 				pago.propietario = item.Event.propietario;
 				pago.monto = item.Event.monto;
-
+                pago.montoComision = item.Event.montoComison;
+                pago.montoPropietario = item.Event.montoPropietario;
+                pago.MinedOnBlock = item.Log.BlockNumber.ToString();
+                pago.TXHash = item.Log.TransactionHash;
 				pagos.Add(pago);
 			}
 		}
@@ -198,6 +201,8 @@ namespace SM.SmartContractInteraction
 				{
 					if (pagoCupon.inquilino.ToUpper()==cupon.Inquilino.ToUpper() && pagoCupon.propietario.ToUpper()==cupon.Propietario.ToUpper() && pagoCupon.monto== (BigInteger.Parse(cupon.Monto.ToString())*1000000000000000))
 					{
+                        cupon.MinedOnBlock = pagoCupon.MinedOnBlock;
+                        cupon.TXHash = pagoCupon.TXHash;
                         contrastados.Add(cupon);
 					}
 				}

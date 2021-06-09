@@ -18,7 +18,8 @@ namespace SM.DAL.Models
 		public bool IsPayed { get; set; }
 		public RentContract rentContract { get; set; }
 		public bool Isvalid { get; set; }
-
+		public string TXHash { get; set; }
+		public string MinedOnBlock { get; set; }
 
 	}
 }

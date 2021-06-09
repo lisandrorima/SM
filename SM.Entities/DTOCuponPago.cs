@@ -15,5 +15,7 @@ namespace SM.Entities
 		public int RentContractID { get; set; }
 		public int Monto { get; set; }
 		public string OwnerWallet { get; set; }
+		public string TXHash { get; set; }
+		public string MinedOnBlock { get; set; }
 	}
 }

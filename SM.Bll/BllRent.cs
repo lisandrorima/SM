@@ -216,13 +216,18 @@ namespace SM.Bll
 
 		public async Task<int> ValidarCupones(List<DTOpaymentVerification> cuponesAModificar)
 		{
-			List<string> cupones = new List<string>();
+			List<CuponDePago> cupones = new List<CuponDePago>();
 			CuponDePago cupon = new CuponDePago();
 
 
+
 			foreach (var item in cuponesAModificar)
-			{ 
-				cupones.Add(item.Cupon);
+			{
+				cupon.HashCuponPago = item.Cupon;
+				cupon.MinedOnBlock = item.MinedOnBlock;
+				cupon.TXHash = item.TXHash;
+				cupones.Add(cupon);
+				
 			}
 
 			return await _DaoRent.UpdatePagados(cupones);
