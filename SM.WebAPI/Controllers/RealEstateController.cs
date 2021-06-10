@@ -116,19 +116,31 @@ namespace SM.WebAPI.Controllers
 
 		[Authorize]
 		[HttpPut]
-		[Route("Modificarmipropiedad")]
-		public async Task<IActionResult> ModificarMiPropiedad(DTOAddRealEstate prop)
+		[HttpPost]
+		[Route("propiedades")]
+		public async Task<IActionResult> ModificarMiPropiedad(int? id, DTOAddRealEstate prop)
 		{
 			var email = GetEmailFromContext(HttpContext);
 
-			if (await _repository.UpdateRealEstate(prop, email) != null)
+			if (id != null)
 			{
-				return Ok();
+
+				if (await _repository.UpdateRealEstate(prop, email) != null)
+				{
+					return Ok();
+				}
+				return BadRequest();
+
 			}
 			else
 			{
+				if (await _repository.AddRealEstate(prop, email) != null)
+				{
+					return Ok();
+				}
 				return BadRequest();
 			}
+
 
 		}
 
@@ -154,10 +166,10 @@ namespace SM.WebAPI.Controllers
 			var email = GetEmailFromContext(HttpContext);
 
 			await _repository.AddRealEstate(prop, email);
-		
+
 			return Ok();
 		}
-		
+
 
 
 		[Authorize]
@@ -169,7 +181,7 @@ namespace SM.WebAPI.Controllers
 			var validated = _repository.validateImage(file);
 			if (validated != null)
 				return BadRequest(validated.ToString());
-			
+
 			var credentials = new BasicAWSCredentials("AKIA5LZCIECLMXRCIGU4", "fieG1W90YQblzXLifAxOd36sjhNCc2EB71s8G0lj");
 			var config = new AmazonS3Config
 			{
@@ -183,7 +195,7 @@ namespace SM.WebAPI.Controllers
 			var uploadRequest = new TransferUtilityUploadRequest
 			{
 				InputStream = newMemoryStream,
-				Key = file.FileName,
+				Key = Guid.NewGuid().ToString(),
 				BucketName = "smartprop",
 				CannedACL = S3CannedACL.PublicRead,
 			};

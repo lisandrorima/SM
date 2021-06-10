@@ -234,12 +234,16 @@ namespace SM.Bll
 		public async Task<int> ValidarCupones(List<DTOpaymentVerification> cuponesAModificar)
 		{
 			List<CuponDePago> cupones = new List<CuponDePago>();
-			CuponDePago cupon = new CuponDePago();
+			
 
 
 
 			foreach (var item in cuponesAModificar)
 			{
+
+			
+
+				CuponDePago cupon = new CuponDePago();
 				cupon.HashCuponPago = item.Cupon;
 				cupon.MinedOnBlock = item.MinedOnBlock;
 				cupon.TXHash = item.TXHash;
