@@ -26,6 +26,8 @@ namespace SM.DAL.Models
 		public bool Garage { get; set; }
 		public bool Available { get; set; }
 		public string Localidad { get; set; }
+
+		public bool IsDeleted { get; set; }
 		public User User { get; set; }
 		public Provincia Provincia { get; set; }
 		public List<ImagesRealEstate> images { get; set; }

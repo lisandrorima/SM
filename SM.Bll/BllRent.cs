@@ -50,6 +50,7 @@ namespace SM.Bll
 					ValidatedByBlockChain = false,
 					Hash = "",
 					Isvalid = true
+					
 
 				};
 				ContractToAdd.Hash = GenerateHashContrato(ContractToAdd);
@@ -160,6 +161,7 @@ namespace SM.Bll
 				cupon.FechaVencimiento = GenerateFechaVencimiento(cupon, i, contract);
 				cupon.Isvalid = true;
 				cupon.HashCuponPago = GenerateHashCupon(cupon);
+				cupon.Monto = realEstate.RentFee;
 
 				cupones.Add(cupon);
 			}
@@ -221,7 +223,7 @@ namespace SM.Bll
 
 				verifiacion.Inquilino = item.rentContract.Tenant.WalletAddress;
 				verifiacion.Propietario = item.rentContract.Owner.WalletAddress;
-				verifiacion.Monto = item.rentContract.RealEstate.RentFee;
+				verifiacion.Monto = item.Monto;
 				verifiacion.Cupon = item.HashCuponPago;
 
 				cuponesValidos.Add(verifiacion);

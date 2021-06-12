@@ -185,6 +185,8 @@ namespace SM.Bll
 			{
 				if (ValidateProp(prop, email))
 				{
+					prop.IsDeleted = true;
+					prop.Available = false;
 					await _DaoRealEstate.DeleteProp(prop);
 					dto = _mapper.Map<DTOShowRealEstate>(prop);
 				}
@@ -204,7 +206,7 @@ namespace SM.Bll
 
 			if (prop != null)
 			{
-				if (prop.User.Email == email && prop.Available)
+				if (prop.User.Email == email && prop.Available && !prop.IsDeleted)
 				{
 					isValid = true;
 				}

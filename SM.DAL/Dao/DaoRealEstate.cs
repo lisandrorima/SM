@@ -31,7 +31,7 @@ namespace SM.DAL.Dao
 
 		public async Task<IEnumerable<RealEstate>> GetAllAsync()
 		{
-			return await _context.RealEstates.Where(R => R.Available).Include(r=>r.images).Include(p => p.Provincia).ToListAsync();
+			return await _context.RealEstates.Where(R => R.Available && !R.IsDeleted).Include(r=>r.images).Include(p => p.Provincia).ToListAsync();
 
 		}
 
@@ -42,18 +42,18 @@ namespace SM.DAL.Dao
 
 		public async Task<RealEstate> GetPropertyByIDAsync(int id)
 		{
-			return await _context.RealEstates.Where(rs => rs.ID == id).Include(u => u.User).Include(r => r.images).Include(p => p.Provincia).FirstOrDefaultAsync();
+			return await _context.RealEstates.Where(rs => rs.ID == id & !rs.IsDeleted).Include(u => u.User).Include(r => r.images).Include(p => p.Provincia).FirstOrDefaultAsync();
 
 		}
 
 		public async Task<IEnumerable<RealEstate>> GetPropertyDetails(int id)
 		{
-			return await _context.RealEstates.Where(c => c.ID == id).Include(r => r.images).Include(p => p.Provincia).Include(u=>u.User).ToListAsync();
+			return await _context.RealEstates.Where(c => c.ID == id && !c.IsDeleted).Include(r => r.images).Include(p => p.Provincia).Include(u=>u.User).ToListAsync();
 		}
 
 		public async Task<IEnumerable<RealEstate>> GetRealEstatesByOwnerAsync(string email)
 		{
-			return await _context.RealEstates.Where(c=> c.User.Email == email).Include(r => r.images).Include(p => p.Provincia).ToListAsync();
+			return await _context.RealEstates.Where(c=> c.User.Email == email && !c.IsDeleted).Include(r => r.images).Include(p => p.Provincia).ToListAsync();
 		}
 
 		public async Task<bool> DisableRealEstate(RealEstate realEstate)
@@ -79,7 +79,7 @@ namespace SM.DAL.Dao
 
 		public async Task<IEnumerable<RealEstate>> GetRelated()
 		{
-			return await _context.RealEstates.Where(R => R.Available).Include(r => r.images).Include(p => p.Provincia).OrderBy(r => Guid.NewGuid()).Take(3).ToListAsync();
+			return await _context.RealEstates.Where(R => R.Available && !R.IsDeleted).Include(r => r.images).Include(p => p.Provincia).OrderBy(r => Guid.NewGuid()).Take(3).ToListAsync();
 
 		}
 
@@ -94,7 +94,7 @@ namespace SM.DAL.Dao
 			try
 			{
 
-				_context.RealEstates.Remove(prop);
+				
 
 				await _context.SaveChangesAsync();
 			}
@@ -138,7 +138,7 @@ namespace SM.DAL.Dao
 		{
 			var query = _context.RealEstates.AsQueryable();
 
-			query = query.Where(r => r.Available);
+			query = query.Where(r => r.Available && !r.IsDeleted);
 
 			query = AddAreaFiler(request, query);
 
