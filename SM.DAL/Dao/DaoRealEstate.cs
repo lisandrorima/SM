@@ -42,7 +42,7 @@ namespace SM.DAL.Dao
 
 		public async Task<RealEstate> GetPropertyByIDAsync(int id)
 		{
-			return await _context.RealEstates.Where(rs => rs.ID == id & !rs.IsDeleted).Include(u => u.User).Include(r => r.images).Include(p => p.Provincia).FirstOrDefaultAsync();
+			return await _context.RealEstates.Where(rs => rs.ID == id & !rs.IsDeleted && rs.Available).Include(u => u.User).Include(r => r.images).Include(p => p.Provincia).FirstOrDefaultAsync();
 
 		}
 
