@@ -81,10 +81,14 @@ namespace SM.WebAPI.Controllers
 		[AllowAnonymous]
 		[HttpGet]
 		[Route("GetPropByID")]
-		public async Task<DTOShowRealEstate> GetPropByID(int id)
+		public async Task<IActionResult> GetPropByID(int id)
 		{
-			return await _repository.GetRealEstateByID(id);
-
+			 var propiedad = await _repository.GetRealEstateByID(id);
+			if (propiedad == null)
+			{
+				return NotFound();
+			}
+			return Ok(propiedad);
 		}
 
 		[AllowAnonymous]
