@@ -10,6 +10,10 @@ namespace SM.DAL.Models
 {
 	public class RealEstate
 	{
+		public RealEstate()
+		{
+			images = new List<ImagesRealEstate>();
+		}
 		
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]

@@ -23,7 +23,7 @@ namespace SM.DAL.Dao
 
 		public async Task<RealEstate> AddRealEstate(RealEstate realEstate)
 		{
-			realEstate.Provincia =  await _context.Provincias.Where(r =>r.Nombre == realEstate.Provincia.Nombre).FirstOrDefaultAsync();
+			realEstate.Provincia = await _context.Provincias.Where(r => r.Nombre == realEstate.Provincia.Nombre).FirstOrDefaultAsync();
 			await _context.RealEstates.AddAsync(realEstate);
 			await _context.SaveChangesAsync();
 			return realEstate;
@@ -31,29 +31,35 @@ namespace SM.DAL.Dao
 
 		public async Task<IEnumerable<RealEstate>> GetAllAsync()
 		{
-			return await _context.RealEstates.Where(R => R.Available && !R.IsDeleted).Include(r=>r.images).Include(p => p.Provincia).ToListAsync();
+			return await _context.RealEstates.Where(R => R.Available && !R.IsDeleted).Include(r => r.images).Include(p => p.Provincia).ToListAsync();
 
 		}
 
 		public async Task<IEnumerable<RealEstate>> GetFilteredMetros(int from, int to)
 		{
-			return await _context.RealEstates.Where(rs => rs.SqMtrs >=from & rs.SqMtrs<=to).Include(r => r.images).Include(p => p.Provincia).ToListAsync();
+			return await _context.RealEstates.Where(rs => rs.SqMtrs >= from & rs.SqMtrs <= to).Include(r => r.images).Include(p => p.Provincia).ToListAsync();
 		}
 
 		public async Task<RealEstate> GetPropertyByIDAsync(int id)
 		{
-			return await _context.RealEstates.Where(rs => rs.ID == id & !rs.IsDeleted && rs.Available).Include(u => u.User).Include(r => r.images).Include(p => p.Provincia).FirstOrDefaultAsync();
+			return await _context.RealEstates.Where(rs => rs.ID == id && !rs.IsDeleted && rs.Available).Include(u => u.User).Include(r => r.images).Include(p => p.Provincia).FirstOrDefaultAsync();
+
+		}
+
+		public async Task<RealEstate> GetPropertyByIDForValidationAsync(int id)
+		{
+			return await _context.RealEstates.Where(rs => rs.ID == id && !rs.IsDeleted).Include(u => u.User).Include(r => r.images).Include(p => p.Provincia).FirstOrDefaultAsync();
 
 		}
 
 		public async Task<IEnumerable<RealEstate>> GetPropertyDetails(int id)
 		{
-			return await _context.RealEstates.Where(c => c.ID == id && !c.IsDeleted).Include(r => r.images).Include(p => p.Provincia).Include(u=>u.User).ToListAsync();
+			return await _context.RealEstates.Where(c => c.ID == id && !c.IsDeleted).Include(r => r.images).Include(p => p.Provincia).Include(u => u.User).ToListAsync();
 		}
 
 		public async Task<IEnumerable<RealEstate>> GetRealEstatesByOwnerAsync(string email)
 		{
-			return await _context.RealEstates.Where(c=> c.User.Email == email && !c.IsDeleted).Include(r => r.images).Include(p => p.Provincia).ToListAsync();
+			return await _context.RealEstates.Where(c => c.User.Email == email && !c.IsDeleted).Include(r => r.images).Include(p => p.Provincia).ToListAsync();
 		}
 
 		public async Task<bool> DisableRealEstate(RealEstate realEstate)
@@ -65,16 +71,16 @@ namespace SM.DAL.Dao
 			{
 				await _context.SaveChangesAsync();
 				success = true;
-;
+				;
 			}
 			catch { }
 			return success;
-			
+
 		}
 
 		public async Task<IEnumerable<RealEstate>> GetRelated(string localidad)
 		{
-			return await _context.RealEstates.Where(R => R.Available & R.Localidad==localidad).Include(r => r.images).Include(p => p.Provincia).OrderBy(r => Guid.NewGuid()).Take(3).ToListAsync();
+			return await _context.RealEstates.Where(R => R.Available & R.Localidad == localidad).Include(r => r.images).Include(p => p.Provincia).OrderBy(r => Guid.NewGuid()).Take(3).ToListAsync();
 		}
 
 		public async Task<IEnumerable<RealEstate>> GetRelated()
@@ -85,7 +91,7 @@ namespace SM.DAL.Dao
 
 		public async Task<IEnumerable<RealEstate>> Getfiltered(RealEstateFilter request)
 		{
-			return await GetWithFilterquery(request).Include(r => r.images).Include(p=>p.Provincia).ToListAsync();
+			return await GetWithFilterquery(request).Include(r => r.images).Include(p => p.Provincia).ToListAsync();
 
 		}
 
@@ -94,7 +100,7 @@ namespace SM.DAL.Dao
 			try
 			{
 
-				
+
 
 				await _context.SaveChangesAsync();
 			}
@@ -107,9 +113,9 @@ namespace SM.DAL.Dao
 
 		public async Task<RealEstate> UpdateRealEstate(RealEstate updatedProp)
 		{
-			
+
 			var modifRealEstate = await _context.RealEstates.FindAsync(updatedProp.ID);
-			
+
 
 			try
 			{
@@ -122,6 +128,7 @@ namespace SM.DAL.Dao
 				modifRealEstate.BedRoomQty = updatedProp.BedRoomQty;
 				modifRealEstate.RentPaymentSchedule = updatedProp.RentPaymentSchedule;
 				modifRealEstate.RentFee = updatedProp.RentFee;
+				modifRealEstate.Available = updatedProp.Available;
 				await _context.SaveChangesAsync();
 				return updatedProp;
 			}
@@ -129,7 +136,7 @@ namespace SM.DAL.Dao
 			{
 				return null;
 			}
-			
+
 
 		}
 
@@ -152,7 +159,7 @@ namespace SM.DAL.Dao
 
 			return query;
 		}
-		
+
 
 		private static IQueryable<RealEstate> AddGarageFilter(RealEstateFilter request, IQueryable<RealEstate> query)
 		{
@@ -162,7 +169,7 @@ namespace SM.DAL.Dao
 				{
 					query = query.Where(x => x.Garage.Equals(request.Garage));
 				}
-				
+
 			}
 
 			return query;
@@ -290,11 +297,21 @@ namespace SM.DAL.Dao
 			return query;
 		}
 
-		public async  Task<List<ImagesRealEstate>> AddImages(List<ImagesRealEstate> imagesRealEstates)
+		public async Task<List<ImagesRealEstate>> AddImages(List<ImagesRealEstate> imagesRealEstates)
 		{
-			imagesRealEstates.ForEach( u => _context.ImagesRealEstate.AddAsync(u));
+			imagesRealEstates.ForEach(u => _context.ImagesRealEstate.AddAsync(u));
 			await _context.SaveChangesAsync();
 			return imagesRealEstates;
+		}
+
+		public async Task<IEnumerable<RentContract>> getValidContractsForProp(RealEstate prop)
+		{
+			return await _context.RentContracts.Where(r => r.RealEstate == prop && r.Isvalid == true).ToListAsync();
+		}
+
+		public async Task<IEnumerable<Provincia>> GetProvincias()
+		{
+			return await _context.Provincias.ToListAsync();
 		}
 	}
 }

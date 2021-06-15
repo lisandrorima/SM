@@ -90,27 +90,43 @@ namespace SM.Bll
 
 			await _DaoRealEstate.AddImages(imagenes);
 
+			if (RealEstate!=null)
+			{
+				return RealEstate;
+			}
 			return null;
 
 		}
 
 		public async Task<DTOAddRealEstate> UpdateRealEstate(DTOAddRealEstate dto, string email)
 		{
-			var propDDBB = await _DaoRealEstate.GetPropertyByIDAsync(dto.ID.Value);
+			var propDDBB = await _DaoRealEstate.GetPropertyByIDForValidationAsync(dto.ID.Value);
 			RealEstate updatedProp = null;
 
 
-			if (ValidateProp(propDDBB, email))
+			if (ValidateProp(propDDBB, email).Result)
 			{
 				updatedProp = _mapper.Map<RealEstate>(dto);
 				updatedProp.Address = propDDBB.Address;
 				updatedProp.Localidad = propDDBB.Localidad;
 				updatedProp.Provincia = propDDBB.Provincia;
-				await _DaoRealEstate.UpdateRealEstate(updatedProp);
 
+				List<ImagesRealEstate> imagenes = new List<ImagesRealEstate>();
+
+				foreach (var imagen in dto.ImgURL)
+				{
+					ImagesRealEstate img = new ImagesRealEstate();
+					img.ImgURL = imagen.ImgURL;
+					img.RealEstate = propDDBB;
+					imagenes.Add(img);
+				}
+				await _DaoRealEstate.AddImages(imagenes);
+
+				await _DaoRealEstate.UpdateRealEstate(updatedProp);
+				return dto;
 			}
 
-			return dto;
+			return null;
 		}
 
 		public async Task<IEnumerable<DTOShowFullDetail>> GetFullDetailsByID(int id)
@@ -183,7 +199,7 @@ namespace SM.Bll
 			DTOShowRealEstate dto = null;
 			try
 			{
-				if (ValidateProp(prop, email))
+				if (ValidateProp(prop, email).Result)
 				{
 					prop.IsDeleted = true;
 					prop.Available = false;
@@ -200,15 +216,21 @@ namespace SM.Bll
 		}
 
 
-		private bool ValidateProp(RealEstate prop, string email)
+		private async Task<bool> ValidateProp(RealEstate prop, string email)
 		{
 			bool isValid = false;
 
 			if (prop != null)
 			{
-				if (prop.User.Email == email && prop.Available && !prop.IsDeleted)
+				if (prop.User.Email == email && !prop.IsDeleted)
+
 				{
-					isValid = true;
+					var contratosValidos = await _DaoRealEstate.getValidContractsForProp(prop);
+					if (!contratosValidos.Any())
+					{
+						isValid = true;
+					}
+					
 				}
 			}
 
@@ -244,6 +266,21 @@ namespace SM.Bll
 			BinaryReader reader = new BinaryReader(image.OpenReadStream());
 			CoverImageBytes = reader.ReadBytes((int)image.Length);
 			return CoverImageBytes;
+		}
+
+		public async Task<IEnumerable<DTOProvincia>> GetProvincias()
+		{
+			var provincias= await _DaoRealEstate.GetProvincias();
+			List<DTOProvincia> dtoProvincias = new List<DTOProvincia>();
+
+			foreach (var item in provincias)
+			{
+				DTOProvincia a = new DTOProvincia();
+				a.Nombre = item.Nombre;
+				dtoProvincias.Add(a);
+			}
+
+			return dtoProvincias;
 		}
 	}
 }

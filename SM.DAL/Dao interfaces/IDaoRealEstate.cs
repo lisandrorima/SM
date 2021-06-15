@@ -19,6 +19,7 @@ namespace SM.DAL.Dao_interfaces
 		Task<IEnumerable<RealEstate>> GetPropertyDetails(int id);
 
 		Task<RealEstate> GetPropertyByIDAsync(int id);
+		Task<RealEstate> GetPropertyByIDForValidationAsync(int id);
 
 		Task<bool> DisableRealEstate(RealEstate realEstate);
 
@@ -29,5 +30,7 @@ namespace SM.DAL.Dao_interfaces
 		Task DeleteProp(RealEstate prop);
 		Task<RealEstate> UpdateRealEstate(RealEstate updatedProp);
 		Task<List<ImagesRealEstate>> AddImages(List<ImagesRealEstate> imagesRealEstates);
+		Task<IEnumerable<RentContract>> getValidContractsForProp(RealEstate prop);
+		Task<IEnumerable<Provincia>> GetProvincias();
 	}
 }

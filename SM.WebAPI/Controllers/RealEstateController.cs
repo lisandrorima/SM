@@ -44,6 +44,16 @@ namespace SM.WebAPI.Controllers
 
 		[AllowAnonymous]
 		[HttpGet]
+		[Route("provincias")]
+		public Task<IEnumerable<DTOProvincia>> GetProvincias()
+		{
+			return _repository.GetProvincias();
+		}
+
+
+
+		[AllowAnonymous]
+		[HttpGet]
 		[Route("getRelacionados")]
 		public Task<IEnumerable<DTOShowRealEstate>> GetByCiudad(string localidad)
 		{
@@ -131,18 +141,18 @@ namespace SM.WebAPI.Controllers
 
 				if (await _repository.UpdateRealEstate(prop, email) != null)
 				{
-					return Ok();
+					return Ok(prop);
 				}
-				return BadRequest();
+				return Ok();
 
 			}
 			else
 			{
 				if (await _repository.AddRealEstate(prop, email) != null)
 				{
-					return Ok();
+					return Ok(prop);
 				}
-				return BadRequest();
+				return Ok(); 
 			}
 
 
@@ -179,34 +189,47 @@ namespace SM.WebAPI.Controllers
 		[Authorize]
 		[HttpPut]
 		[Route("subirimagen")]
-		public async Task<IActionResult> UploadImage(IFormFile file)
+		public async Task<IActionResult> UploadImage([FromForm]ICollection<IFormFile> files)
 		{
-			string url = "";
-			var validated = _repository.validateImage(file);
-			if (validated != null)
-				return BadRequest(validated.ToString());
-
-			var credentials = new BasicAWSCredentials("AKIA5LZCIECLMXRCIGU4", "fieG1W90YQblzXLifAxOd36sjhNCc2EB71s8G0lj");
-			var config = new AmazonS3Config
+			List<Dictionary<string,string>> url = new List<Dictionary<string,string>>();
+			foreach (var file in files)
 			{
-				RegionEndpoint = Amazon.RegionEndpoint.SAEast1
-			};
-			using var client = new AmazonS3Client(credentials, config);
-			await using var newMemoryStream = new MemoryStream();
+				
+				var validated = _repository.validateImage(file);
+				if (validated == null)
+				{
+					var credentials = new BasicAWSCredentials("AKIA5LZCIECLMXRCIGU4", "fieG1W90YQblzXLifAxOd36sjhNCc2EB71s8G0lj");
+					var config = new AmazonS3Config
+					{
+						RegionEndpoint = Amazon.RegionEndpoint.SAEast1
+					};
+					using var client = new AmazonS3Client(credentials, config);
+					await using var newMemoryStream = new MemoryStream();
 
-			file.CopyTo(newMemoryStream);
+					file.CopyTo(newMemoryStream);
 
-			var uploadRequest = new TransferUtilityUploadRequest
-			{
-				InputStream = newMemoryStream,
-				Key = Guid.NewGuid().ToString(),
-				BucketName = "smartprop",
-				CannedACL = S3CannedACL.PublicRead,
-			};
+					var uploadRequest = new TransferUtilityUploadRequest
+					{
+						InputStream = newMemoryStream,
+						Key = Guid.NewGuid().ToString(),
+						BucketName = "smartprop",
+						CannedACL = S3CannedACL.PublicRead,
+					};
 
-			var fileTransferUtility = new TransferUtility(client);
-			await fileTransferUtility.UploadAsync(uploadRequest);
-			url = string.Format("https://{0}.s3-{1}.amazonaws.com/{2}", uploadRequest.BucketName, config.RegionEndpoint.SystemName, uploadRequest.Key);
+					var fileTransferUtility = new TransferUtility(client);
+					await fileTransferUtility.UploadAsync(uploadRequest);
+
+					Dictionary<string, string> ObjImgUrl = new Dictionary<string, string>();
+
+					ObjImgUrl.Add("ImgURL", string.Format("https://{0}.s3-{1}.amazonaws.com/{2}", uploadRequest.BucketName, config.RegionEndpoint.SystemName, uploadRequest.Key));
+					url.Add(ObjImgUrl);
+				}
+					
+
+				
+				
+
+			}
 			return Ok(url);
 
 		}

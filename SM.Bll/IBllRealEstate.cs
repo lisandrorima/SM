@@ -24,5 +24,6 @@ namespace SM.Bll
 		Task<DTOShowRealEstate> DeletePropiedad(int id, string email);
 
 		public string validateImage(IFormFile file);
+		Task<IEnumerable<DTOProvincia>> GetProvincias();
 	}
 }
