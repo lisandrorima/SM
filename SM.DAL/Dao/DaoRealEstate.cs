@@ -78,9 +78,9 @@ namespace SM.DAL.Dao
 
 		}
 
-		public async Task<IEnumerable<RealEstate>> GetRelated(string localidad)
+		public async Task<IEnumerable<RealEstate>> GetRelated(string provincia)
 		{
-			return await _context.RealEstates.Where(R => R.Available & R.Localidad == localidad).Include(r => r.images).Include(p => p.Provincia).OrderBy(r => Guid.NewGuid()).Take(3).ToListAsync();
+			return await _context.RealEstates.Where(R => R.Available & R.Provincia.Nombre == provincia).Include(r => r.images).Include(p => p.Provincia).OrderBy(r => Guid.NewGuid()).Take(3).ToListAsync();
 		}
 
 		public async Task<IEnumerable<RealEstate>> GetRelated()
@@ -302,6 +302,12 @@ namespace SM.DAL.Dao
 			imagesRealEstates.ForEach(u => _context.ImagesRealEstate.AddAsync(u));
 			await _context.SaveChangesAsync();
 			return imagesRealEstates;
+		}
+
+		public async Task<List<ImagesRealEstate>> GetImagesRealEstatesAsync(int idProp)
+		{
+			return await _context.ImagesRealEstate.Where(r => r.RealEstate.ID == idProp).ToListAsync();
+		
 		}
 
 		public async Task<IEnumerable<RentContract>> getValidContractsForProp(RealEstate prop)

@@ -55,9 +55,9 @@ namespace SM.WebAPI.Controllers
 		[AllowAnonymous]
 		[HttpGet]
 		[Route("getRelacionados")]
-		public Task<IEnumerable<DTOShowRealEstate>> GetByCiudad(string localidad)
+		public Task<IEnumerable<DTOShowRealEstate>> GetByCiudad(string provincia)
 		{
-			return _repository.GetRelacionado(localidad);
+			return _repository.GetRelacionado(provincia);
 		}
 
 		[AllowAnonymous]

@@ -32,5 +32,7 @@ namespace SM.DAL.Dao_interfaces
 		Task<List<ImagesRealEstate>> AddImages(List<ImagesRealEstate> imagesRealEstates);
 		Task<IEnumerable<RentContract>> getValidContractsForProp(RealEstate prop);
 		Task<IEnumerable<Provincia>> GetProvincias();
+
+		Task<List<ImagesRealEstate>> GetImagesRealEstatesAsync(int idProp);
 	}
 }

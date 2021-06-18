@@ -111,17 +111,33 @@ namespace SM.Bll
 				updatedProp.Localidad = propDDBB.Localidad;
 				updatedProp.Provincia = propDDBB.Provincia;
 
-				List<ImagesRealEstate> imagenes = new List<ImagesRealEstate>();
+				List<ImagesRealEstate> imagenesFromDDBB = await _DaoRealEstate.GetImagesRealEstatesAsync(updatedProp.ID.Value);
+				List<ImagesRealEstate> newImagenes = new List<ImagesRealEstate>();
 
-				foreach (var imagen in dto.ImgURL)
+				if (dto.ImgURL!=null)
 				{
-					ImagesRealEstate img = new ImagesRealEstate();
-					img.ImgURL = imagen.ImgURL;
-					img.RealEstate = propDDBB;
-					imagenes.Add(img);
-				}
-				await _DaoRealEstate.AddImages(imagenes);
+					foreach (var imagen in dto.ImgURL)
+					{
+						ImagesRealEstate img = new ImagesRealEstate();
+						img.ImgURL = imagen.ImgURL;
+						img.RealEstate = propDDBB;
 
+						
+
+						if (!imagenesFromDDBB.Any(x =>imagen.ImgURL ==x.ImgURL))
+						{
+							newImagenes.Add(img);
+						}
+					
+						
+					}
+				}
+
+				if (newImagenes.Count>0)
+				{
+					await _DaoRealEstate.AddImages(newImagenes);
+				}
+			
 				await _DaoRealEstate.UpdateRealEstate(updatedProp);
 				return dto;
 			}
@@ -150,16 +166,16 @@ namespace SM.Bll
 			return dto;
 		}
 
-		public async Task<IEnumerable<DTOShowRealEstate>> GetRelacionado(string localidad)
+		public async Task<IEnumerable<DTOShowRealEstate>> GetRelacionado(string provincia)
 		{
 			IEnumerable<RealEstate> realEstates;
-			if (localidad == null)
+			if (provincia == null)
 			{
 				realEstates = await _DaoRealEstate.GetRelated();
 			}
 			else
 			{
-				realEstates = await _DaoRealEstate.GetRelated(localidad);
+				realEstates = await _DaoRealEstate.GetRelated(provincia);
 			}
 
 

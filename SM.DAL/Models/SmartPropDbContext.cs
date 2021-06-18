@@ -64,6 +64,11 @@ namespace SM.DAL.Models
   .HasIndex(p => new { p.HashCuponPago })
   .IsUnique(true);
 
+            modelBuilder.Entity<ImagesRealEstate>()
+ .HasIndex(p => new { p.ImgURL })
+ .IsUnique(true);
+
+
             modelBuilder.Entity<CuponDePago>()
 .HasAlternateKey(x => x.HashCuponPago);
 
