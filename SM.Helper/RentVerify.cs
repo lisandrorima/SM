@@ -11,24 +11,27 @@ using System.Text.Json;
 
 namespace SM.Helper
 {
-	public static class RentVerify
-	{
-		public static bool VerifyRent(DTORentProperty fromFront, DTOShowRealEstate fromDDBB)
-		{
-			bool isValid = false;
-
-		if(fromFront.ID==fromDDBB.ID && fromFront.Address==fromDDBB.Address
-                && fromFront.RentDurationDays == fromDDBB.RentDurationDays && fromFront.RentFee== fromDDBB.RentFee &&
+    public static class RentVerify
+    {
+        public static bool VerifyRent(DTORentProperty fromFront, DTOShowRealEstate fromDDBB)
+        {
+            bool isValid = false;
+            if (fromDDBB != null)
+            {
+                if (fromFront.ID == fromDDBB.ID && fromFront.Address == fromDDBB.Address
+                && fromFront.RentDurationDays == fromDDBB.RentDurationDays && fromFront.RentFee == fromDDBB.RentFee &&
                 fromFront.RentPaymentSchedule == fromDDBB.RentPaymentSchedule && fromDDBB.Available)
-			{
-                isValid=true;
-			}
+                {
+                    isValid = true;
+                }
+            }
+
 
 
             return isValid;
-		}
+        }
 
 
-       
-	}
+
+    }
 }
