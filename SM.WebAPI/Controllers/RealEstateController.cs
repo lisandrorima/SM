@@ -135,6 +135,8 @@ namespace SM.WebAPI.Controllers
 		public async Task<IActionResult> ModificarMiPropiedad(int? id, DTOAddRealEstate prop)
 		{
 			var email = GetEmailFromContext(HttpContext);
+			if (prop.Provincia == null || prop.ImgURL.Count == 0)
+				return BadRequest();
 
 			if (id != null)
 			{

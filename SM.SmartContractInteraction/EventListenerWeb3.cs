@@ -46,7 +46,7 @@ namespace SM.SmartContractInteraction
                     {
                         await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
                     }
-                    await Task.Delay(Convert.ToInt32(TimeSpan.FromSeconds(20).TotalMilliseconds), stoppingToken);
+                    await Task.Delay(Convert.ToInt32(TimeSpan.FromSeconds(5).TotalMilliseconds), stoppingToken);
                 }
             }
 
